@@ -50,6 +50,13 @@ class DashboardController extends Controller
                 ip: request()->ip(),
                 ua: request()->userAgent()
             );
+
+            \App\Models\Notification::create([
+                'title' => 'Amplop Dibuka',
+                'message' => "Siswa <strong>{$student->name}</strong> baru saja membuka amplop kelulusan.",
+                'type' => 'success',
+                'icon' => 'ri-mail-open-line',
+            ]);
         }
 
         return view('student.dashboard', [
@@ -129,6 +136,13 @@ class DashboardController extends Controller
             ip: request()->ip(),
             ua: request()->userAgent()
         );
+
+        \App\Models\Notification::create([
+            'title' => 'Dokumen Diunduh',
+            'message' => "Siswa <strong>{$student->name}</strong> mengunduh file <strong>{$label}</strong>.",
+            'type' => 'info',
+            'icon' => 'ri-file-download-line',
+        ]);
 
         $filename = $documentType === GraduationDocumentType::SKL
             ? 'SKL_' . str_replace(' ', '_', $student->name) . '.pdf'

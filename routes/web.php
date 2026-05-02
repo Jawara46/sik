@@ -89,6 +89,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/search', SearchController::class)->name('search');
 
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+        
+        // Notifications
+        Route::prefix('notifications')->name('notifications.')->group(function (): void {
+            Route::get('/', [\App\Http\Controllers\Admin\NotificationController::class, 'index'])->name('index');
+            Route::post('/{notification}/read', [\App\Http\Controllers\Admin\NotificationController::class, 'markAsRead'])->name('read');
+            Route::post('/read-all', [\App\Http\Controllers\Admin\NotificationController::class, 'markAllAsRead'])->name('read-all');
+        });
         Route::prefix('school')->name('school.')->group(function (): void {
             Route::get('/profile', [SchoolController::class, 'index'])->name('profile.index');
             Route::put('/profile', [SchoolController::class, 'update'])->name('profile.update');

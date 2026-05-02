@@ -68,6 +68,13 @@ class SystemConfigController extends Controller
     {
         $backup = $this->databaseBackupService->create();
 
+        \App\Models\Notification::create([
+            'title' => 'Backup Database',
+            'message' => "Backup database <strong>{$backup['filename']}</strong> berhasil dibuat secara manual.",
+            'type' => 'primary',
+            'icon' => 'ri-database-2-line',
+        ]);
+
         return redirect()
             ->route('admin.settings.backup.index')
             ->with('status', sprintf(

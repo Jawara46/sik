@@ -221,70 +221,166 @@ $supportedLocales = (array) config('sik.supported_locales', ['id', 'en']);
           href="javascript:void(0);"
           data-bs-toggle="dropdown"
           data-bs-auto-close="outside"
-          aria-expanded="false">
+          aria-expanded="false"
+          id="notification-trigger">
           <i class="ri ri-notification-2-line ri-22px"></i>
-          <span class="position-absolute top-0 start-50 translate-middle-y badge badge-dot bg-danger mt-2 border"></span>
+          <span id="notification-count-badge" class="position-absolute top-0 start-50 translate-middle-y badge badge-dot bg-danger mt-2 border d-none"></span>
         </a>
         <ul class="dropdown-menu dropdown-menu-end py-0">
           <li class="dropdown-menu-header border-bottom py-50">
             <div class="dropdown-header d-flex align-items-center py-2">
               <h6 class="mb-0 me-auto">{{ __('app.topbar.notifications') }}</h6>
-              <span class="badge rounded-pill bg-label-primary fs-xsmall">{{ __('app.topbar.new_count') }}</span>
+              <span id="notification-count-label" class="badge rounded-pill bg-label-primary fs-xsmall d-none">0 Baru</span>
+              <a href="javascript:void(0)" id="mark-all-read" class="dropdown-notifications-all text-body" data-bs-toggle="tooltip" data-bs-placement="top" title="Tandai semua dibaca">
+                <i class="ri ri-mail-open-line fs-4"></i>
+              </a>
             </div>
           </li>
           <li class="dropdown-notifications-list scrollable-container">
-            <ul class="list-group list-group-flush">
-              <li class="list-group-item list-group-item-action dropdown-notifications-item">
-                <div class="d-flex">
-                  <div class="flex-shrink-0 me-3">
-                    <div class="avatar">
-                      <span class="avatar-initial rounded-circle bg-label-primary"><i class="ri ri-school-line"></i></span>
-                    </div>
-                  </div>
-                  <div class="flex-grow-1">
-                    <h6 class="small mb-1">{{ __('app.topbar.notification_school_ready_title') }}</h6>
-                    <small class="mb-1 d-block text-body">{{ __('app.topbar.notification_school_ready_body') }}</small>
-                    <small class="text-body-secondary">{{ __('app.topbar.notification_school_ready_time') }}</small>
-                  </div>
-                </div>
-              </li>
-              <li class="list-group-item list-group-item-action dropdown-notifications-item">
-                <div class="d-flex">
-                  <div class="flex-shrink-0 me-3">
-                    <div class="avatar">
-                      <span class="avatar-initial rounded-circle bg-label-success"><i class="ri ri-file-excel-2-line"></i></span>
-                    </div>
-                  </div>
-                  <div class="flex-grow-1">
-                    <h6 class="small mb-1">{{ __('app.topbar.notification_template_title') }}</h6>
-                    <small class="mb-1 d-block text-body">{{ __('app.topbar.notification_template_body') }}</small>
-                    <small class="text-body-secondary">{{ __('app.topbar.notification_template_time') }}</small>
-                  </div>
-                </div>
-              </li>
-              <li class="list-group-item list-group-item-action dropdown-notifications-item">
-                <div class="d-flex">
-                  <div class="flex-shrink-0 me-3">
-                    <div class="avatar">
-                      <span class="avatar-initial rounded-circle bg-label-warning"><i class="ri ri-whatsapp-line"></i></span>
-                    </div>
-                  </div>
-                  <div class="flex-grow-1">
-                    <h6 class="small mb-1">{{ __('app.topbar.notification_wa_title') }}</h6>
-                    <small class="mb-1 d-block text-body">{{ __('app.topbar.notification_wa_body') }}</small>
-                    <small class="text-body-secondary">{{ __('app.topbar.notification_wa_time') }}</small>
-                  </div>
-                </div>
+            <ul class="list-group list-group-flush" id="notification-list">
+              <!-- Dynamic Notifications Here -->
+              <li class="list-group-item text-center py-4 text-muted" id="notification-empty">
+                <i class="ri ri-notification-off-line d-block fs-2 mb-2"></i>
+                <small>Tidak ada notifikasi baru</small>
               </li>
             </ul>
           </li>
-          <li class="border-top">
+          <li class="border-top" id="notification-footer">
             <div class="d-grid p-3">
               <a class="btn btn-sm btn-primary" href="{{ route('admin.whatsapp.connection.index') }}">{{ __('app.topbar.open_whatsapp_center') }}</a>
             </div>
           </li>
         </ul>
       </li>
+
+      <script>
+        document.addEventListener('DOMContentLoaded', function() {
+          const notificationList = document.getElementById('notification-list');
+          const notificationBadge = document.getElementById('notification-count-badge');
+          const notificationLabel = document.getElementById('notification-count-label');
+          const notificationEmpty = document.getElementById('notification-empty');
+          const markAllReadBtn = document.getElementById('mark-all-read');
+
+          function fetchNotifications() {
+            fetch('{{ route("admin.notifications.index") }}')
+              .then(response => response.json())
+              .then(data => {
+                updateNotificationUI(data);
+              })
+              .catch(error => console.error('Error fetching notifications:', error));
+          }
+
+          function updateNotificationUI(data) {
+            const { notifications, unread_count } = data;
+
+            // Update badges
+            if (unread_count > 0) {
+              notificationBadge.classList.remove('d-none');
+              notificationLabel.classList.remove('d-none');
+              notificationLabel.textContent = `${unread_count} Baru`;
+            } else {
+              notificationBadge.classList.add('d-none');
+              notificationLabel.classList.add('d-none');
+            }
+
+            if (notifications.length === 0) {
+              notificationEmpty.classList.remove('d-none');
+              // Remove old items but keep empty state
+              const items = notificationList.querySelectorAll('.notification-item');
+              items.forEach(item => item.remove());
+              return;
+            }
+
+            notificationEmpty.classList.add('d-none');
+
+            // Simple clear and re-render (optimization later if needed)
+            const oldItems = notificationList.querySelectorAll('.notification-item');
+            oldItems.forEach(item => item.remove());
+
+            notifications.forEach(notif => {
+              const li = document.createElement('li');
+              li.className = `list-group-item list-group-item-action dropdown-notifications-item notification-item`;
+              li.innerHTML = `
+                <div class="d-flex align-items-start">
+                  <div class="flex-shrink-0 me-3">
+                    <div class="avatar">
+                      <span class="avatar-initial rounded-circle bg-label-${notif.type}"><i class="ri ${notif.icon}"></i></span>
+                    </div>
+                  </div>
+                  <div class="flex-grow-1">
+                    <h6 class="small mb-1">${notif.title}</h6>
+                    <small class="mb-1 d-block text-body">${notif.message}</small>
+                    <small class="text-body-secondary">${notif.time}</small>
+                  </div>
+                  <div class="flex-shrink-0 dropdown-notifications-actions">
+                    <a href="javascript:void(0)" class="mark-as-read text-muted" data-id="${notif.id}">
+                      <i class="ri ri-circle-fill fs-tiny text-primary"></i>
+                    </a>
+                  </div>
+                </div>
+              `;
+              
+              // Add click event for mark as read
+              li.querySelector('.mark-as-read').addEventListener('click', function(e) {
+                e.stopPropagation();
+                markAsRead(notif.id, li);
+              });
+
+              notificationList.appendChild(li);
+            });
+          }
+
+          function markAsRead(id, element) {
+            fetch(`{{ url('admin/notifications') }}/${id}/read`, {
+              method: 'POST',
+              headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Content-Type': 'application/json'
+              }
+            })
+            .then(response => response.json())
+            .then(data => {
+              if (data.success) {
+                element.style.opacity = '0';
+                element.style.transform = 'translateX(20px)';
+                element.style.transition = 'all 0.3s ease';
+                setTimeout(() => {
+                  element.remove();
+                  fetchNotifications(); // Refresh count
+                }, 300);
+              }
+            });
+          }
+
+          markAllReadBtn.addEventListener('click', function() {
+            fetch('{{ route("admin.notifications.read-all") }}', {
+              method: 'POST',
+              headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Content-Type': 'application/json'
+              }
+            })
+            .then(response => response.json())
+            .then(data => {
+              if (data.success) {
+                const items = notificationList.querySelectorAll('.notification-item');
+                items.forEach(item => {
+                  item.style.opacity = '0';
+                  item.style.transform = 'translateX(20px)';
+                  item.style.transition = 'all 0.3s ease';
+                });
+                setTimeout(() => {
+                  fetchNotifications();
+                }, 300);
+              }
+            });
+          });
+
+          // Poll every 30 seconds
+          fetchNotifications();
+          setInterval(fetchNotifications, 30000);
+        });
+      </script>
 
       <li class="nav-item dropdown">
         <a
