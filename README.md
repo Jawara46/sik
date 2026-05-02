@@ -286,9 +286,9 @@ Perangkat lunak ini bersifat **proprietary** dan hanya boleh digunakan sesuai de
 
 | | |
 |---|---|
-| 🌐 Website | [yazid.my.id](https://yazid.my.id) |
+| 🌐 Website | [yazidigital.com](https://yazidigital.com) |
 | 📱 WhatsApp | [081311112309](https://wa.me/6281311112309) |
-| 📧 Email | hello@yazid.my.id |
+| 📧 Email | admin@yazidigital.com|
 
 ---
 
