@@ -27,7 +27,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        URL::forceRootUrl((string) config('app.url'));
+        // URL::forceRootUrl((string) config('app.url')); // Removed to allow dynamic IP/Domain access
 
         View::composer('*', function ($view): void {
             static $uiSettings = null;
