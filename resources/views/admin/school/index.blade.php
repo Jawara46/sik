@@ -681,9 +681,9 @@
       </div>
       <div class="card-body">
         <div class="wa-qr-box">
-          <img id="wa-qr-image" src="{{ $waStatus['qr_code'] ?? '' }}" alt="QR WhatsApp" style="max-width: 260px; width: 100%; {{ empty($waStatus['qr_code']) ? 'display:none;' : '' }}">
-          <p id="wa-qr-placeholder" class="text-muted mb-0 {{ empty($waStatus['qr_code']) ? '' : 'd-none' }}">
-            QR Code belum tersedia. Klik tombol "Hubungkan WhatsApp".
+          <img id="wa-qr-image" src="{{ $waStatus['qr_code'] ?? '' }}" alt="QR WhatsApp" style="max-width: 260px; width: 100%; {{ empty($waStatus['qr_code']) || ($waStatus['status'] ?? '') === 'CONNECTED' ? 'display:none;' : '' }}">
+          <p id="wa-qr-placeholder" class="mb-0 {{ empty($waStatus['qr_code']) || ($waStatus['status'] ?? '') === 'CONNECTED' ? '' : 'd-none' }} {{ ($waStatus['status'] ?? '') === 'CONNECTED' ? 'text-success fw-medium' : 'text-muted' }}">
+            {{ ($waStatus['status'] ?? '') === 'CONNECTED' ? 'WhatsApp Gateway berhasil terhubung. Anda sudah dapat mengirim pesan otomatis.' : 'QR Code belum tersedia. Klik tombol "Hubungkan WhatsApp".' }}
           </p>
         </div>
       </div>
@@ -711,13 +711,18 @@
       statusBadge.classList.toggle('bg-success', isConnected);
       statusBadge.classList.toggle('bg-danger', !isConnected);
 
-      if (data.qr_code) {
+      if (isConnected) {
+        qrImage.style.display = 'none';
+        qrPlaceholder.textContent = 'WhatsApp Gateway berhasil terhubung. Anda sudah dapat mengirim pesan otomatis.';
+        qrPlaceholder.className = 'mb-0 text-success fw-medium';
+      } else if (data.qr_code) {
         qrImage.src = data.qr_code;
         qrImage.style.display = 'block';
-        qrPlaceholder.classList.add('d-none');
-      } else if (!isConnected) {
+        qrPlaceholder.className = 'mb-0 d-none text-muted';
+      } else {
         qrImage.style.display = 'none';
-        qrPlaceholder.classList.remove('d-none');
+        qrPlaceholder.textContent = 'QR Code belum tersedia. Klik tombol "Hubungkan WhatsApp".';
+        qrPlaceholder.className = 'mb-0 text-muted';
       }
     }
 

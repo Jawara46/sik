@@ -15,20 +15,20 @@
     <span class="lp-brand-text">{{ $schoolName ?? 'SIK-T' }}</span>
   </a>
 
-  <div class="d-flex min-vh-100" style="position: relative; z-index: 2;">
+  <div class="d-flex flex-column flex-lg-row min-vh-100" style="position: relative; z-index: 2;">
 
     <!-- LEFT TEXT -->
-    <div class="d-none d-lg-flex col-lg-7 align-items-start px-5" style="padding-left: 3.5rem !important; padding-top: 11rem !important;">
+    <div class="d-flex col-12 col-lg-7 align-items-center justify-content-center align-items-lg-start px-4 px-lg-5 mt-5 pt-5 mt-lg-0 pt-lg-0 info-section-wrapper">
       <div class="lp-info-card">
-        <div class="icon-wrapper">
+        <div class="icon-wrapper d-none d-sm-flex">
           <i class="ri-graduation-cap-fill"></i>
         </div>
-        <div class="info-content">
-          <h3 class="gradient-text">Portal Kelulusan Digital</h3>
-          <p>
+        <div class="info-content text-center text-sm-start">
+          <h3 class="gradient-text" style="font-size: clamp(1.3rem, 3vw, 1.6rem);">Portal Kelulusan Digital</h3>
+          <p style="font-size: clamp(0.95rem, 2vw, 1.15rem);">
             Cek status kelulusan dan unduh dokumen
             <span class="highlight">Surat Keterangan Lulus (SKL)</span> serta
-            <span class="highlight">Transkrip Nilai</span> Anda secara mandiri melalui portal ini.
+            <span class="highlight">Transkrip Nilai</span> secara mandiri melalui portal ini.
           </p>
         </div>
       </div>
@@ -251,9 +251,27 @@
     }
 
     /* RESPONSIVE */
-    @media (max-width: 991px) {
-      .lp-info-box {
-        display: none;
+    .info-section-wrapper {
+      padding-top: 3rem;
+      margin-bottom: -1rem;
+    }
+
+    @media (min-width: 992px) {
+      .info-section-wrapper {
+        padding-top: 11rem !important;
+        padding-left: 3.5rem !important;
+        margin-bottom: 0;
+      }
+    }
+
+    @media (max-width: 575px) {
+      .lp-info-card {
+        padding: 1.5rem;
+        border-radius: 20px;
+      }
+      .lp-brand {
+        top: 16px;
+        left: 20px;
       }
     }
   </style>
