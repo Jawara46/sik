@@ -167,8 +167,8 @@
     @endif
 
     <div class="title template-html">
-        {!! $template['title_html'] ?? '<strong>SURAT KETERANGAN LULUS</strong>' !!}
-        <span>Nomor: {{ $document->document_number ?? 'DRAFT-' . $document->id }}</span>
+        <div style="margin-bottom: 2px;">{!! $template['title_html'] ?? '<strong>SURAT KETERANGAN LULUS</strong>' !!}</div>
+        <div>Nomor: {{ $document->document_number ?? 'DRAFT-' . $document->id }}</div>
     </div>
 
     @if(($documentMeta['show_photo'] ?? false) && $studentPhotoPath)
