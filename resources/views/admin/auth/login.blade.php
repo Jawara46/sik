@@ -10,7 +10,7 @@
 <div class="lp-bg" style="background-image: url('{{ $bgUrl }}');"></div>
 
 <!-- Brand Logo -->
-<a href="{{ route('admin.login') }}" class="lp-brand">
+<a href="{{ url('/') }}" class="lp-brand">
   <img src="{{ $logoUrl }}" alt="SIK-T" height="32" onerror="this.src='{{ asset('assets/img/favicon/favicon.ico') }}'">
   <span class="lp-brand-text">SIK-T</span>
 </a>
@@ -48,7 +48,7 @@
           class="form-control"
           id="email"
           name="email"
-          placeholder="admin@sik.local"
+          placeholder="Masukkan email admin Anda"
           value="{{ old('email') }}"
           required
           autofocus
