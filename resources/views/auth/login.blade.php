@@ -18,13 +18,19 @@
   <div class="d-flex min-vh-100" style="position: relative; z-index: 2;">
 
     <!-- LEFT TEXT -->
-    <div class="d-none d-lg-flex col-lg-7 align-items-start px-5" style="padding-left: 3.5rem !important; padding-top: 9rem !important;">
-      <div class="lp-info-box lp-animate">
-        <p class="mb-0">
-          Cek status kelulusan dan unduh dokumen
-          <strong>Surat Keterangan Lulus (SKL)</strong> serta
-          <strong>Transkrip Nilai</strong> Anda secara mandiri melalui portal ini.
-        </p>
+    <div class="d-none d-lg-flex col-lg-7 align-items-start px-5" style="padding-left: 3.5rem !important; padding-top: 11rem !important;">
+      <div class="lp-info-card">
+        <div class="icon-wrapper">
+          <i class="ri-graduation-cap-fill"></i>
+        </div>
+        <div class="info-content">
+          <h3 class="gradient-text">Portal Kelulusan Digital</h3>
+          <p>
+            Cek status kelulusan dan unduh dokumen
+            <span class="highlight">Surat Keterangan Lulus (SKL)</span> serta
+            <span class="highlight">Transkrip Nilai</span> Anda secara mandiri melalui portal ini.
+          </p>
+        </div>
       </div>
     </div>
 
@@ -120,47 +126,100 @@
       font-weight: 600;
     }
 
-    /* INFO BOX */
-    .lp-info-box {
-      max-width: 560px;
-      background: rgba(15, 40, 100, 0.88);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border-radius: 20px;
-      padding: 2.2rem 2.5rem;
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      border-left: 4px solid rgba(100, 160, 255, 0.7);
-      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25),
-                  0 0 60px rgba(59, 130, 246, 0.08);
+    /* INFO CARD */
+    .lp-info-card {
+      max-width: 600px;
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border-radius: 24px;
+      padding: 2.2rem;
+      border: 1px solid rgba(255, 255, 255, 0.9);
+      box-shadow: 0 20px 40px rgba(30, 64, 175, 0.08),
+                  inset 0 0 0 1px rgba(255, 255, 255, 0.5);
+      display: flex;
+      gap: 1.5rem;
+      align-items: flex-start;
+      transform: translateY(0);
+      transition: all 0.4s ease;
+      animation: floatUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      opacity: 0;
     }
 
-    .lp-info-box p {
+    .lp-info-card:hover {
+      transform: translateY(-5px) scale(1.01);
+      box-shadow: 0 25px 50px rgba(30, 64, 175, 0.12);
+      background: rgba(255, 255, 255, 0.85);
+    }
+
+    .lp-info-card .icon-wrapper {
+      width: 64px;
+      height: 64px;
+      flex-shrink: 0;
+      background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 10px 20px rgba(59, 130, 246, 0.3);
+      animation: pulseGlow 2s infinite alternate;
+    }
+
+    .lp-info-card .icon-wrapper i {
+      font-size: 2.2rem;
       color: #fff;
-      font-size: 1.25rem;
-      font-weight: 400;
-      line-height: 1.85;
-      letter-spacing: 0.3px;
+    }
+
+    .lp-info-card .info-content h3 {
+      font-size: 1.6rem;
+      font-weight: 800;
+      margin-bottom: 0.6rem;
+      background: linear-gradient(135deg, #0f172a, #1e4ed8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: -0.5px;
+    }
+
+    .lp-info-card .info-content p {
+      color: #475569;
+      font-size: 1.15rem;
+      line-height: 1.7;
       margin: 0;
+      font-weight: 500;
     }
 
-    .lp-info-box p strong {
-      color: #93c5fd;
+    .lp-info-card .info-content .highlight {
+      color: #1e4ed8;
       font-weight: 700;
+      background: rgba(59, 130, 246, 0.1);
+      padding: 0.2rem 0.5rem;
+      border-radius: 6px;
+      display: inline-block;
+      margin-bottom: 2px;
+      transition: background 0.3s ease;
     }
 
-    /* Slide-up fade-in animation */
-    .lp-animate {
-      animation: lpSlideUp 0.8s ease-out both;
+    .lp-info-card:hover .highlight {
+      background: rgba(59, 130, 246, 0.15);
     }
 
-    @keyframes lpSlideUp {
+    @keyframes floatUp {
       0% {
         opacity: 0;
-        transform: translateY(30px);
+        transform: translateY(40px);
       }
       100% {
         opacity: 1;
         transform: translateY(0);
+      }
+    }
+
+    @keyframes pulseGlow {
+      0% {
+        box-shadow: 0 10px 20px rgba(59, 130, 246, 0.3);
+      }
+      100% {
+        box-shadow: 0 15px 30px rgba(59, 130, 246, 0.5);
       }
     }
 
