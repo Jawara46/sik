@@ -80,7 +80,7 @@
         </div>
 
         <div class="d-block d-lg-none mt-4 text-center">
-          <small class="text-muted">&copy; 2026 Yazid Digital<br>SIK-T v1.0</small>
+          <small class="text-muted">&copy; {{ date('Y') }} {{ config('sik.developer', 'Yazid Digital') }}<br>SIK-T v{{ config('sik.version', '1.0') }}</small>
         </div>
       </div>
     </div>
