@@ -193,6 +193,7 @@
         @media (max-width: 991.98px) {
             .lp-hero-panel { display: none !important; }
             .auth-card { border-radius: 16px; padding: 32px 24px; }
+            .auth-footer-overlay { display: none !important; }
         }
 
         /* ── Subtle float animation ── */
@@ -209,7 +210,7 @@
     <!-- / Content -->
 
     <!-- Auth Footer Overlay -->
-    <div style="position: fixed; bottom: 0; width: 100%; z-index: 10;">
+    <div class="auth-footer-overlay" style="position: fixed; bottom: 0; width: 100%; z-index: 10;">
         @include('components.materialize.footer')
     </div>
 
