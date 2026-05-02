@@ -21,7 +21,7 @@
 
 ## 📋 Tentang
 
-**SIK-T** adalah sistem informasi kelulusan terpadu yang dirancang khusus untuk sekolah menengah (SMA/SMK) di Indonesia. Sistem ini menyediakan solusi lengkap mulai dari pengelolaan data siswa, manajemen nilai, penerbitan dokumen kelulusan (SKL, Transkrip, Sertifikat UKK), hingga notifikasi otomatis melalui WhatsApp Gateway.
+**SIK-T** adalah sistem informasi kelulusan terpadu yang dirancang untuk digunakan pada **semua jenjang pendidikan** di Indonesia (SD, SMP, SMA/sederajat). Sistem ini menyediakan solusi lengkap mulai dari pengelolaan data siswa, manajemen nilai, penerbitan dokumen kelulusan (SKL & Transkrip), hingga notifikasi otomatis melalui WhatsApp Gateway. Khusus untuk jenjang **SMK**, terdapat fitur tambahan eksklusif untuk penerbitan **Sertifikat Uji Kompetensi Keahlian (UKK)**.
 
 ### Mengapa SIK-T?
 
