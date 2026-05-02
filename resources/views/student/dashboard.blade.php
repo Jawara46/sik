@@ -300,12 +300,12 @@
 <div id="result-popup" style="
   display:none; position:fixed; inset:0; z-index:99999;
   background:rgba(0,0,0,0.75); backdrop-filter:blur(8px);
-  align-items:center; justify-content:center;">
+  align-items:flex-start; justify-content:center; overflow-y:auto; padding: 40px 20px;">
 
   <div id="result-letter" style="
     background:#fff; border-radius:24px; padding:56px 48px; text-align:center;
     max-width:480px; width:90%; box-shadow:0 40px 100px rgba(0,0,0,0.4);
-    transform:scale(0.6) translateY(60px); opacity:0;
+    margin: auto; transform:scale(0.6) translateY(60px); opacity:0;
     transition:transform 0.55s cubic-bezier(.34,1.56,.64,1), opacity 0.45s ease;
     position:relative; overflow:hidden;">
 
@@ -458,8 +458,8 @@ document.addEventListener('DOMContentLoaded', function() {
   function triggerConfetti() {
     var end = Date.now() + 5000;
     (function frame() {
-      confetti({ particleCount: 5, angle: 60,  spread: 60, origin: { x: 0 } });
-      confetti({ particleCount: 5, angle: 120, spread: 60, origin: { x: 1 } });
+      confetti({ particleCount: 5, angle: 60,  spread: 60, origin: { x: 0 }, zIndex: 100000 });
+      confetti({ particleCount: 5, angle: 120, spread: 60, origin: { x: 1 }, zIndex: 100000 });
       if (Date.now() < end) requestAnimationFrame(frame);
     })();
   }
