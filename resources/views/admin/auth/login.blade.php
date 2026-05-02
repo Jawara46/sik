@@ -88,10 +88,6 @@
       </button>
     </form>
 
-    <div class="mt-4 text-center small">
-      <span style="color: #8ca0c4;">Akun awal:</span>
-      <code>admin@sik.local</code> / <code>password</code>
-    </div>
   </div>
 </div>
 @endsection

@@ -431,15 +431,12 @@ document.addEventListener('DOMContentLoaded', function() {
               countdownBar.style.width = '0%';
             }, 50);
 
-            // Step 3: after countdown → hide popup, show dashboard
+            // Step 3: after countdown → hide popup, reload page
             setTimeout(function() {
               resultPopup.style.transition = 'opacity 0.6s ease';
               resultPopup.style.opacity    = '0';
               setTimeout(function() {
-                resultPopup.style.display = 'none';
-                dashContent.classList.remove('d-none');
-                dashContent.style.opacity = '0';
-                setTimeout(function() { dashContent.style.opacity = '1'; }, 30);
+                window.location.reload();
               }, 600);
             }, DISPLAY_MS + 200);
           });
