@@ -178,7 +178,7 @@ pm2 startup
 
 > Untuk hosting yang tidak menyediakan akses SSH, gunakan metode ZIP.
 
-1. **Download** release terbaru dari halaman [Releases](https://github.com/Jawara46/sik/releases)
+1. **Download** source code terbaru dengan menekan tombol **Code** warna hijau di bagian atas halaman GitHub ini, lalu pilih **Download ZIP**.
 2. **Upload** file ZIP ke hosting via File Manager cPanel
 3. **Extract** ke dalam folder `public_html` atau subdomain yang diinginkan
 4. **Buat database MySQL** melalui cPanel → MySQL Databases
@@ -288,7 +288,7 @@ Perangkat lunak ini bersifat **proprietary** dan hanya boleh digunakan sesuai de
 |---|---|
 | 🌐 Website | [yazidigital.com](https://yazidigital.com) |
 | 📱 WhatsApp | [081311112309](https://wa.me/6281311112309) |
-| 📧 Email | admin@yazidigital.com|
+| 📧 Email | admin@yazidigital.com |
 
 ---
 
