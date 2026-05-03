@@ -110,7 +110,7 @@
         <i class="ri ri-calendar-event-fill" style="font-size:1.1rem;"></i>
         <div>
           <div style="font-size:.72rem; opacity:.8; line-height:1.2;">Tanggal Pengumuman</div>
-          <strong>{{ $school->tanggal_pengumuman ? \Carbon\Carbon::parse($school->tanggal_pengumuman)->translatedFormat('d M Y, H:i') : 'Belum Diatur' }}</strong>
+          <strong>{{ $school?->tanggal_pengumuman ? \Carbon\Carbon::parse($school->tanggal_pengumuman)->translatedFormat('d M Y, H:i') : 'Belum Diatur' }}</strong>
         </div>
       </div>
     </div>

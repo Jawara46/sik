@@ -67,7 +67,7 @@ class TranscriptPdfService
         ];
 
         $pdfBinary = Pdf::loadView('admin.graduation.pdf.transcript', $data)
-            ->setPaper('a4', 'landscape')
+            ->setPaper('a4', 'portrait')
             ->setOption('isPhpEnabled', false)
             ->setOption('chroot', [public_path(), storage_path('app/public'), storage_path('app/private')])
             ->setOption('isRemoteEnabled', false)

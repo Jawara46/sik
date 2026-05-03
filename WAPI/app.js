@@ -108,6 +108,9 @@ const logAutoRespond = (payload) => {
   );
 };
 
+const NodeCache = require("node-cache");
+const msgRetryCounterCache = new NodeCache();
+
 async function connectToWhatsApp() {
   const { state, saveCreds } = await useMultiFileAuthState("./auth_info");
   let { version } = await fetchLatestBaileysVersion();
@@ -116,6 +119,13 @@ async function connectToWhatsApp() {
     logger: log({ level: "silent" }),
     version,
     shouldIgnoreJid: (jid) => isJidBroadcast(jid),
+    markOnlineOnConnect: false,
+    syncFullHistory: false,
+    generateHighQualityLinkPreview: true,
+    msgRetryCounterCache,
+    getMessage: async (key) => {
+      return { conversation: "Pesan SIK-T" };
+    },
   });
 
   sock.ev.on("creds.update", saveCreds);

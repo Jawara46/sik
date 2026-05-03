@@ -36,7 +36,7 @@ class AppServiceProvider extends ServiceProvider
             if ($uiSettings === null) {
                 $defaults = [
                     'app_logo' => 'assets/img/logo.png',
-                    'background_image' => 'assets/img/illustrations/auth-login-illustration-light.png',
+                    'background_image' => 'assets/img/bg-lp.jpg',
                 ];
 
                 try {
@@ -113,7 +113,7 @@ class AppServiceProvider extends ServiceProvider
             $view->with('uiSettings', $uiSettings);
             $view->with('uiSettingsUrl', [
                 'app_logo' => $resolveMediaUrl($uiSettings['app_logo'] ?? null, 'assets/img/logo.png'),
-                'background_image' => $resolveMediaUrl($uiSettings['background_image'] ?? null, 'assets/img/illustrations/auth-login-illustration-light.png'),
+                'background_image' => $resolveMediaUrl($uiSettings['background_image'] ?? null, 'assets/img/bg-lp.jpg'),
             ]);
             $view->with('currentSchoolType', $currentSchoolType);
 
