@@ -39,6 +39,8 @@ class DashboardController extends Controller
         // 10 recent activity logs
         $recentActivities = ActivityLog::orderBy('created_at', 'desc')->take(10)->get();
 
+        $announcementDate = DB::table('settings')->where('key', 'announcement_date')->value('value');
+
         return view('admin.dashboard', compact(
             'totalStudents',
             'lulusCount',
@@ -47,7 +49,8 @@ class DashboardController extends Controller
             'waSent',
             'school',
             'recentLogs',
-            'recentActivities'
+            'recentActivities',
+            'announcementDate'
         ));
     }
 }
