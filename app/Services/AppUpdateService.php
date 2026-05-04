@@ -239,11 +239,34 @@ class AppUpdateService
         $zip->extractTo($extractDir);
         $zip->close();
 
+        $log[] = '✅ Ekstraksi selesai.';
+        
+        if (!File::exists($extractDir)) {
+             $log[] = '❌ Direktori ekstraksi tidak ditemukan.';
+             File::deleteDirectory($tempDir);
+             return [
+                 'success' => false,
+                 'method' => 'zip',
+                 'message' => 'Gagal mengekstrak file update: Direktori tidak ditemukan.',
+                 'log' => $log,
+             ];
+        }
+
         // GitHub ZIPs contain a root folder like "Jawara46-sik-abc1234/"
         $dirs = File::directories($extractDir);
         $sourceDir = ! empty($dirs) ? $dirs[0] : $extractDir;
 
-        $log[] = '✅ Ekstraksi selesai.';
+        if (!File::exists($sourceDir)) {
+            $log[] = '❌ Direktori sumber update tidak valid.';
+            File::deleteDirectory($tempDir);
+            return [
+                'success' => false,
+                'method' => 'zip',
+                'message' => 'File update tidak lengkap atau rusak.',
+                'log' => $log,
+            ];
+        }
+
         $log[] = '🔄 Menyalin file baru...';
 
         // Protected paths — never overwrite
@@ -277,6 +300,11 @@ class AppUpdateService
      */
     private function syncDirectory(string $source, string $destination, array $protectedPaths, array &$log): void
     {
+        if (!is_dir($source)) {
+            $log[] = "⚠️ Skipping sync: source directory {$source} does not exist.";
+            return;
+        }
+
         $items = File::allFiles($source);
         $copied = 0;
         $skipped = 0;
