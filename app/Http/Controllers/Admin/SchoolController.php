@@ -64,6 +64,7 @@ class SchoolController extends Controller
             'tanggal_surat' => ['nullable', 'date'],
             'show_pkl_transcript' => ['nullable', 'boolean'],
             'show_student_photo_on_skl' => ['nullable', 'boolean'],
+            'show_grades_on_skl' => ['nullable', 'boolean'],
             'skl_number_pattern' => ['nullable', 'string', 'max:150'],
             'skl_number_mode' => ['nullable', 'in:dynamic,static'],
             'transcript_number_pattern' => ['nullable', 'string', 'max:150'],
@@ -81,6 +82,7 @@ class SchoolController extends Controller
 
         $validated['show_pkl_transcript'] = $request->boolean('show_pkl_transcript');
         $validated['show_student_photo_on_skl'] = $request->boolean('show_student_photo_on_skl');
+        $validated['show_grades_on_skl'] = $request->boolean('show_grades_on_skl');
         // Because unchecked HTML checkboxes send nothing, we check existence/boolean cast
         $validated['use_digital_stamp'] = $request->boolean('use_digital_stamp');
         $validated['use_envelope_animation'] = $request->boolean('use_envelope_animation');

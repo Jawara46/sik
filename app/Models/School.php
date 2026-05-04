@@ -31,6 +31,7 @@ class School extends Model
         'bg_countdown',
         'show_pkl_transcript',
         'show_student_photo_on_skl',
+        'show_grades_on_skl',
         'logo_path',
         'signature_path',
         'stamp_path',
@@ -57,6 +58,7 @@ class School extends Model
             'tanggal_surat' => 'date',
             'show_pkl_transcript' => 'boolean',
             'show_student_photo_on_skl' => 'boolean',
+            'show_grades_on_skl' => 'boolean',
             'use_digital_stamp' => 'boolean',
             'use_envelope_animation' => 'boolean',
         ];

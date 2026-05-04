@@ -289,6 +289,22 @@
               <small class="text-muted">Jika aktif, SKL akan memakai pas foto siswa yang sudah diunggah pada data siswa.</small>
             </div>
             <div class="col-12">
+              <div class="form-check form-switch mt-2">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  id="show_grades_on_skl"
+                  name="show_grades_on_skl"
+                  value="1"
+                  @checked(old('show_grades_on_skl', $school->show_grades_on_skl ?? false))
+                >
+                <label class="form-check-label" for="show_grades_on_skl">
+                  Tampilkan rincian nilai pada SKL
+                </label>
+              </div>
+              <small class="text-muted">Jika aktif, SKL akan menyertakan tabel rincian nilai (Daftar Nilai Sementara) di bawah pernyataan kelulusan.</small>
+            </div>
+            <div class="col-12">
               <label class="form-label" for="skl_number_pattern">Pola Nomor SKL</label>
               <div class="input-group">
                 <select class="form-select" id="skl_number_mode" name="skl_number_mode" style="max-width: 130px;">

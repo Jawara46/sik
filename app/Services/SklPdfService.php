@@ -42,12 +42,16 @@ class SklPdfService
         $school = (array) data_get($payload, 'school', []);
         $student = (array) data_get($payload, 'student', []);
         $documentMeta = (array) data_get($payload, 'document', []);
+        $subjects = (array) data_get($payload, 'subjects', []);
+        $summary = (array) data_get($payload, 'summary', []);
 
         $data = [
             'document' => $document,
             'school' => $school,
             'student' => $student,
             'documentMeta' => $documentMeta,
+            'subjects' => $subjects,
+            'summary' => $summary,
             'qrCode' => $qrCode,
             'letterheadPath' => $this->optimizePdfAsset($this->resolveStorageAssetPath($school['kop_surat'] ?? null), 'skl-letterhead', 1800, 420),
             'schoolLogoPath' => $this->optimizePdfAsset(

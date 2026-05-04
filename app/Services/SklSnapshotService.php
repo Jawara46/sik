@@ -10,6 +10,7 @@ class SklSnapshotService
 {
     public function __construct(
         private readonly DocumentTemplateService $documentTemplateService,
+        private readonly GradeRecapService $gradeRecapService,
     ) {
     }
 
@@ -31,6 +32,21 @@ class SklSnapshotService
                 'body_html' => '',
                 'closing_html' => '',
             ];
+
+        $showGradesOnSkl = (bool) ($school?->show_grades_on_skl ?? false);
+        $subjects = [];
+        $summary = null;
+
+        if ($showGradesOnSkl) {
+            $student->loadMissing(['grades.subject']);
+            $subjects = $this->gradeRecapService->getFinalGrades($student)
+                ->map(function ($item) {
+                    $item['final_score'] = $item['score'];
+                    return $item;
+                })
+                ->toArray();
+            $summary = $this->gradeRecapService->getTranscriptSummary($student);
+        }
 
         return [
             'student' => [
@@ -65,10 +81,13 @@ class SklSnapshotService
                 'issued_place' => $school?->tempat_surat,
                 'issued_date' => optional($school?->tanggal_surat)->format('Y-m-d'),
                 'show_photo' => (bool) ($school?->show_student_photo_on_skl ?? false),
+                'show_grades' => $showGradesOnSkl,
                 'show_signature' => is_string($school?->ttd_kepsek) && trim((string) $school?->ttd_kepsek) !== '',
                 'show_stamp' => (bool) ($school?->use_digital_stamp ?? false),
                 'use_letterhead' => is_string($school?->kop_surat) && trim((string) $school?->kop_surat) !== '',
             ],
+            'subjects' => $subjects,
+            'summary' => $summary,
             'template' => $templateSections,
         ];
     }

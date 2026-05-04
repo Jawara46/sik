@@ -125,6 +125,38 @@
         .template-html .ql-align-justify {
             text-align: justify;
         }
+        .grades-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 12px 0;
+            font-size: 12px;
+        }
+        .grades-table th, .grades-table td {
+            border: 1px solid #111827;
+            padding: 3px 8px;
+            vertical-align: middle;
+        }
+        .grades-table th {
+            background-color: #f8fafc;
+            text-align: center;
+            font-weight: bold;
+        }
+        .grades-table .category-header {
+            background-color: #f1f5f9;
+            font-weight: bold;
+        }
+        .grades-table .number-col {
+            width: 30px;
+            text-align: center;
+        }
+        .grades-table .score-col {
+            width: 80px;
+            text-align: center;
+        }
+        .grades-table .avg-row {
+            font-weight: bold;
+            background-color: #f8fafc;
+        }
     </style>
 </head>
 <body>
@@ -217,6 +249,59 @@
     <div class="content template-html">
         {!! $template['body_html'] ?? ('<p>Berdasarkan hasil rapat dewan guru dan ketentuan akademik yang berlaku, peserta didik tersebut di atas dinyatakan <strong>' . e(strtoupper($documentMeta['graduation_status'] ?? 'LULUS')) . '</strong> dari ' . e($school['nama_sekolah'] ?? 'sekolah ini') . ' pada tahun pelajaran berjalan.</p>') !!}
     </div>
+
+    @if($documentMeta['show_grades'] ?? false)
+        <div style="margin-top: 10px; font-weight: bold;">Dengan rincian nilai sebagai berikut:</div>
+        <table class="grades-table">
+            <thead>
+                <tr>
+                    <th class="number-col">No</th>
+                    <th>Mata Pelajaran</th>
+                    <th class="score-col">Nilai</th>
+                </tr>
+            </thead>
+            <tbody>
+                @php
+                    $kelompokA = collect($subjects)->whereIn('category', ['Umum', 'Muatan Nasional', 'Kewilayahan']);
+                    $kelompokB = collect($subjects)->whereIn('category', ['C1', 'C2', 'C3', 'UKK', 'PKL']);
+                    $no = 1;
+                @endphp
+
+                @if($kelompokA->isNotEmpty())
+                    <tr class="category-header">
+                        <td>A.</td>
+                        <td colspan="2">Kelompok Mata Pelajaran Umum</td>
+                    </tr>
+                    @foreach($kelompokA as $subject)
+                        <tr>
+                            <td class="number-col">{{ $no++ }}</td>
+                            <td>{{ $subject['subject_name'] }}</td>
+                            <td class="score-col">{{ number_format((float) ($subject['final_score'] ?? $subject['score'] ?? 0), 2) }}</td>
+                        </tr>
+                    @endforeach
+                @endif
+
+                @if($kelompokB->isNotEmpty())
+                    <tr class="category-header">
+                        <td>B.</td>
+                        <td colspan="2">Kelompok Mata Pelajaran Kejuruan</td>
+                    </tr>
+                    @foreach($kelompokB as $subject)
+                        <tr>
+                            <td class="number-col">{{ $no++ }}</td>
+                            <td>{{ $subject['subject_name'] }}</td>
+                            <td class="score-col">{{ number_format((float) ($subject['final_score'] ?? $subject['score'] ?? 0), 2) }}</td>
+                        </tr>
+                    @endforeach
+                @endif
+
+                <tr class="avg-row">
+                    <td colspan="2" style="text-align: center;">Rata-rata</td>
+                    <td class="score-col">{{ number_format((float) ($summary['overall_average'] ?? 0), 2) }}</td>
+                </tr>
+            </tbody>
+        </table>
+    @endif
 
     <div class="content template-html" style="margin-top: 14px;">
         {!! $template['closing_html'] ?? '<p>Surat keterangan ini dipergunakan sebagaimana mestinya sambil menunggu dokumen resmi lainnya sesuai ketentuan yang berlaku.</p>' !!}
