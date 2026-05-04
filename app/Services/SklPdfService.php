@@ -14,6 +14,11 @@ class SklPdfService
 {
     private const TEMPLATE_VERSION = '2026-03-23-skl-pdf-v2';
 
+    public function __construct(
+        private readonly DocumentTemplateService $documentTemplateService,
+    ) {
+    }
+
     public function render(GraduationDocument $document): string
     {
         if ($document->document_type !== GraduationDocumentType::SKL) {
@@ -23,7 +28,8 @@ class SklPdfService
         $document->loadMissing(['school', 'student']);
 
         $payload = is_array($document->snapshot_payload) ? $document->snapshot_payload : [];
-        $cacheRelativePath = $this->buildCacheRelativePath($document, $payload);
+        $template = $this->documentTemplateService->forSchool($document->school, DocumentTemplateService::TYPE_SKL);
+        $cacheRelativePath = $this->buildCacheRelativePath($document, $payload, $template);
         $cacheAbsolutePath = Storage::disk('local')->path($cacheRelativePath);
 
         if (Storage::disk('local')->exists($cacheRelativePath)) {
@@ -66,8 +72,17 @@ class SklPdfService
             'studentPhotoPath' => $this->optimizePdfAsset($this->resolveStorageAssetPath($student['photo_path'] ?? null), 'skl-student-photo', 420, 560),
         ];
 
+        $template = $this->documentTemplateService->forSchool($document->school, DocumentTemplateService::TYPE_SKL);
+        $paperSize = data_get($payload, 'template.paper_size') ?: $template->paper_size ?: 'a4';
+        $orientation = data_get($payload, 'template.orientation') ?: $template->orientation ?: 'portrait';
+
+        // dompdf doesn't support 'f4' directly, we use dimensions in points
+        if ($paperSize === 'f4') {
+            $paperSize = [0, 0, 612.00, 936.00]; // 215.9mm x 330.2mm
+        }
+
         $pdfBinary = Pdf::loadView('admin.graduation.pdf.skl', $data)
-            ->setPaper('a4', 'portrait')
+            ->setPaper($paperSize, $orientation)
             ->setOption('isPhpEnabled', false)
             ->setOption('chroot', [public_path(), storage_path('app/public'), storage_path('app/private')])
             ->setOption('isRemoteEnabled', false)
@@ -85,13 +100,16 @@ class SklPdfService
         return $cacheAbsolutePath;
     }
 
-    private function buildCacheRelativePath(GraduationDocument $document, array $payload): string
+    private function buildCacheRelativePath(GraduationDocument $document, array $payload, \App\Models\DocumentTemplate $template): string
     {
         $payloadHash = hash('sha1', json_encode($payload, JSON_THROW_ON_ERROR));
         $fingerprint = sha1(implode('|', [
             self::TEMPLATE_VERSION,
             $document->id,
             $document->updated_at?->timestamp ?? 0,
+            $template->updated_at?->timestamp ?? 0,
+            $template->paper_size,
+            $template->orientation,
             $payloadHash,
             (string) ($document->pdf_hash ?? ''),
         ]));

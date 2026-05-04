@@ -6,7 +6,7 @@ return [
     | Versi Aplikasi
     |--------------------------------------------------------------------------
     */
-    'version' => '1.4.5',
+    'version' => '1.5',
     'app_name' => 'SIK-T',
     'app_fullname' => 'Sistem Informasi Kelulusan Terpadu',
     'developer' => 'Yazid Digital',

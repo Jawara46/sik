@@ -255,9 +255,26 @@
                   @method('PUT')
                   <input type="hidden" name="document_type" value="{{ $type['type'] }}">
 
-                  <div class="mb-4">
-                    <label class="form-label">Nama Template</label>
-                    <input type="text" class="form-control" name="name" value="{{ old('name', $template->name) }}" maxlength="120" required>
+                  <div class="row g-4 mb-4">
+                    <div class="col-12 col-md-6">
+                      <label class="form-label">Nama Template</label>
+                      <input type="text" class="form-control" name="name" value="{{ old('name', $template->name) }}" maxlength="120" required>
+                    </div>
+                    <div class="col-6 col-md-3">
+                      <label class="form-label">Ukuran Kertas</label>
+                      <select class="form-select" name="paper_size" required>
+                        <option value="a4" {{ old('paper_size', $template->paper_size) === 'a4' ? 'selected' : '' }}>A4</option>
+                        <option value="legal" {{ old('paper_size', $template->paper_size) === 'legal' ? 'selected' : '' }}>Legal</option>
+                        <option value="f4" {{ old('paper_size', $template->paper_size) === 'f4' ? 'selected' : '' }}>F4 / Folio</option>
+                      </select>
+                    </div>
+                    <div class="col-6 col-md-3">
+                      <label class="form-label">Orientasi</label>
+                      <select class="form-select" name="orientation" required>
+                        <option value="portrait" {{ old('orientation', $template->orientation) === 'portrait' ? 'selected' : '' }}>Portrait</option>
+                        <option value="landscape" {{ old('orientation', $template->orientation) === 'landscape' ? 'selected' : '' }}>Landscape</option>
+                      </select>
+                    </div>
                   </div>
                   <div class="row g-5">
                     <div class="col-12 col-xxl-7">
@@ -289,6 +306,9 @@
                         <button type="submit" class="btn btn-primary">
                           <i class="ri-save-line me-2"></i>Simpan Template
                         </button>
+                        <a href="{{ route('admin.graduation.templates.preview', $type['type']) }}?t={{ time() }}" target="_blank" class="btn btn-outline-info" onclick="if(document.querySelector('.document-template-form').dataset.changed === 'true') { alert('Silakan klik Simpan Template terlebih dahulu agar perubahan ukuran kertas/redaksi terbaca di pratinjau.'); return false; }">
+                          <i class="ri-file-pdf-line me-2"></i>Pratinjau PDF
+                        </a>
                         <a href="{{ route('admin.graduation.templates.index', ['type' => $type['type']]) }}" class="btn btn-outline-secondary">
                           Reset Tampilan
                         </a>
@@ -496,7 +516,11 @@
     });
 
     document.querySelectorAll('.document-template-form').forEach(function (form) {
+      form.addEventListener('input', () => { form.dataset.changed = 'true'; });
+      form.addEventListener('change', () => { form.dataset.changed = 'true'; });
+
       form.addEventListener('submit', function () {
+        form.dataset.changed = 'false';
         editors.forEach(function (item) {
           if (item.hiddenInput) {
             item.hiddenInput.value = normalizeEditorHtml(item.quill.root.innerHTML);

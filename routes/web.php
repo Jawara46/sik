@@ -189,6 +189,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::get('status', [GraduationController::class, 'status'])->name('status.index');
             Route::get('templates', [DocumentTemplateController::class, 'index'])->name('templates.index');
             Route::put('templates/{documentType}', [DocumentTemplateController::class, 'update'])->name('templates.update');
+            Route::get('templates/{documentType}/preview', [DocumentTemplateController::class, 'preview'])->name('templates.preview');
             Route::post('status/bulk-update', [GraduationController::class, 'bulkUpdateStatus'])->name('status.bulk.update');
             Route::post('status/bulk-access', [GraduationController::class, 'bulkUpdateAccess'])->name('status.bulk-access');
             Route::post('status/{student}/update', [GraduationController::class, 'updateStudentStatus'])->name('status.student.update');

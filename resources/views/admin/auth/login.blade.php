@@ -69,9 +69,8 @@
           <button
             type="button"
             class="input-group-text"
-            data-password-toggle
-            data-target="#password">
-            <i class="ri ri-eye-line"></i>
+            id="toggleAdminPassword">
+            <i class="ri ri-eye-line" id="adminEyeIcon"></i>
           </button>
         </div>
       </div>
@@ -90,4 +89,25 @@
 
   </div>
 </div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const btn = document.getElementById('toggleAdminPassword');
+    const input = document.getElementById('password');
+    const icon = document.getElementById('adminEyeIcon');
+    
+    if (btn && input) {
+      btn.onclick = function(e) {
+        e.preventDefault();
+        if (input.type === 'password') {
+          input.type = 'text';
+          icon.classList.replace('ri-eye-line', 'ri-eye-off-line');
+        } else {
+          input.type = 'password';
+          icon.classList.replace('ri-eye-off-line', 'ri-eye-line');
+        }
+      };
+    }
+  });
+</script>
 @endsection

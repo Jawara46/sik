@@ -5,8 +5,12 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\GraduationDocument;
+use App\Services\DocumentNumberService;
 use App\Services\DocumentTemplateService;
 use App\Services\SchoolProfileService;
+use App\Services\SklPdfService;
+use App\Services\SklSnapshotService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -17,6 +21,9 @@ class DocumentTemplateController extends Controller
     public function __construct(
         private readonly SchoolProfileService $schoolProfileService,
         private readonly DocumentTemplateService $documentTemplateService,
+        private readonly SklPdfService $sklPdfService,
+        private readonly SklSnapshotService $sklSnapshotService,
+        private readonly DocumentNumberService $documentNumberService,
     ) {
     }
 
@@ -61,6 +68,8 @@ class DocumentTemplateController extends Controller
 
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:120'],
+            'paper_size' => ['required', 'string', Rule::in(['a4', 'legal', 'f4', 'letter'])],
+            'orientation' => ['required', 'string', Rule::in(['portrait', 'landscape'])],
             'title_html' => ['nullable', 'string'],
             'intro_html' => ['nullable', 'string'],
             'body_html' => ['nullable', 'string'],
@@ -78,5 +87,45 @@ class DocumentTemplateController extends Controller
         return redirect()
             ->route('admin.graduation.templates.index', ['type' => $documentType])
             ->with('status', 'Template surat berhasil diperbarui.');
+    }
+
+    /**
+     * Preview PDF from template editor
+     */
+    public function preview(Request $request, string $documentType): \Symfony\Component\HttpFoundation\Response
+    {
+        $school = $this->schoolProfileService->getCurrentSchool();
+        $sampleStudent = $school->students()->with('major')->orderBy('name')->first();
+
+        if (!$sampleStudent) {
+            return response('Data siswa tidak ditemukan untuk pratinjau.', 404);
+        }
+
+        // For SKL, we use the SklPdfService
+        // We'll need a temporary document or just mock the logic
+        // Actually, the easiest way is to find/create a dummy GraduationDocument for this student
+        $document = GraduationDocument::updateOrCreate(
+            [
+                'school_id' => $school->id,
+                'student_id' => $sampleStudent->id,
+                'document_type' => $documentType,
+            ],
+            [
+                'status' => 'Lulus',
+                'issued_at' => $school->tanggal_surat ?: now(),
+                'snapshot_payload' => $this->sklSnapshotService->buildPayload($sampleStudent),
+            ]
+        );
+
+        $document->document_number = null; // Force regeneration
+        $document->document_number = $this->documentNumberService->generate($document);
+        $document->save();
+
+        $pdfPath = $this->sklPdfService->render($document);
+
+        return response()->file($pdfPath, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'inline; filename="preview-' . $documentType . '.pdf"',
+        ]);
     }
 }

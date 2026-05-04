@@ -88,7 +88,10 @@ class SklSnapshotService
             ],
             'subjects' => $subjects,
             'summary' => $summary,
-            'template' => $templateSections,
+            'template' => array_merge($templateSections, [
+                'paper_size' => $template->paper_size ?? 'a4',
+                'orientation' => $template->orientation ?? 'portrait',
+            ]),
         ];
     }
 }

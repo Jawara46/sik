@@ -1,54 +1,253 @@
 <!DOCTYPE html>
-<html lang="en" data-bs-theme="dark">
-  <head>
+<html lang="id">
+<head>
     <meta charset="utf-8" />
-    <title>Whatsapp Api</title>
-    <meta name="description" content="Kirim WhatsApp secara otomatis." />
-    <meta
-      name="viewport"
-      content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes"
-    />
+    <title>SIK-T WhatsApp Gateway</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg" href="./assets/icon.png" />
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT"
-      crossorigin="anonymous"
-    />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <style>
-      footer {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        color: #fff; /* Warna teks */
-        text-align: center;
-        padding: 10px;
-      }
+        :root {
+            --primary: #25d366;
+            --primary-dark: #128c7e;
+            --bg-dark: #0f172a;
+            --accent: #3b82f6;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: radial-gradient(circle at top right, #1e293b, #0f172a);
+            color: #f8fafc;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .animated-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.4;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(37, 211, 102, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(59, 130, 246, 0.15) 0%, transparent 40%);
+            animation: pulse-bg 10s ease-in-out infinite alternate;
+        }
+
+        @keyframes pulse-bg {
+            from { transform: scale(1); }
+            to { transform: scale(1.1); }
+        }
+
+        main {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .status-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 32px;
+            padding: 50px 40px;
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            animation: slide-up 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes slide-up {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .wa-icon-wrapper {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 30px;
+        }
+
+        .wa-icon-main {
+            width: 100px;
+            height: 100px;
+            background: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 50px;
+            color: white;
+            box-shadow: 0 0 30px rgba(37, 211, 102, 0.4);
+            animation: bounce-pulse 2s infinite;
+            z-index: 2;
+            position: relative;
+        }
+
+        .wa-icon-glow {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--primary);
+            border-radius: 50%;
+            filter: blur(20px);
+            opacity: 0.6;
+            animation: pulse-glow 2s infinite;
+        }
+
+        @keyframes bounce-pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes pulse-glow {
+            0% { transform: scale(1); opacity: 0.6; }
+            50% { transform: scale(1.4); opacity: 0.2; }
+            100% { transform: scale(1); opacity: 0.6; }
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            background: rgba(37, 211, 102, 0.15);
+            color: var(--primary);
+            padding: 8px 20px;
+            border-radius: 100px;
+            font-weight: 600;
+            font-size: 14px;
+            letter-spacing: 0.5px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(37, 211, 102, 0.3);
+        }
+
+        .status-badge .dot {
+            width: 8px;
+            height: 8px;
+            background: var(--primary);
+            border-radius: 50%;
+            margin-right: 10px;
+            box-shadow: 0 0 8px var(--primary);
+            animation: blink 1.5s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        h1 {
+            font-weight: 700;
+            font-size: 32px;
+            margin-bottom: 15px;
+            background: linear-gradient(to bottom, #fff, #94a3b8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        p {
+            color: #94a3b8;
+            font-size: 18px;
+            line-height: 1.6;
+        }
+
+        footer {
+            padding: 30px;
+            text-align: center;
+            color: #64748b;
+            font-size: 14px;
+            font-weight: 400;
+        }
+
+        .brand-text {
+            color: var(--accent);
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        /* Particles Effect */
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            pointer-events: none;
+        }
     </style>
-  </head>
-  <body>
+</head>
+<body>
+    <div class="animated-bg"></div>
+
     <main>
-      <div class="container my-5">
-        <div
-          class="position-relative p-5 text-center text-muted bg-body border border-dashed rounded-5"
-        >
-          <img width="50px" src="./assets/icon.png" alt="" />
-          <p class="col-lg-6 mx-auto">Status Server</p>
-          <h1 class="text-body-emphasis">Server API Whatsapp sudah berjalan</h1>
+        <div class="status-card">
+            <div class="wa-icon-wrapper">
+                <div class="wa-icon-glow"></div>
+                <div class="wa-icon-main">
+                    <i class="bi bi-whatsapp"></i>
+                </div>
+            </div>
+
+            <div>
+                <div class="status-badge">
+                    <span class="dot"></span>
+                    AKTIF & TERHUBUNG
+                </div>
+            </div>
+
+            <h1>SIK-T WhatsApp Gateway</h1>
+            <p>Server API telah berjalan dengan normal dan siap melayani permintaan otomatis kelulusan siswa.</p>
+            
+            <div class="mt-4 pt-3 border-top border-white border-opacity-10">
+                <div class="d-flex justify-content-center gap-4">
+                    <div class="text-start">
+                        <small class="d-block opacity-50">Port</small>
+                        <span class="fw-semibold">3000</span>
+                    </div>
+                    <div class="text-start border-start ps-4 border-white border-opacity-10">
+                        <small class="d-block opacity-50">Node Version</small>
+                        <span class="fw-semibold" id="node-ver">v18.x</span>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-      <div class="container">
-        <footer
-          class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top"
-        >
-          <div class="col-md-4 d-flex align-items-center">
-            <span class="mb-3 mb-md-0 text-body-secondary"
-              >© 2025 SIGAP modul</span
-            >
-          </div>
-        </footer>
-      </div>
     </main>
-  </body>
+
+    <footer>
+        &copy; 2026 <a href="#" class="brand-text">Yazid Digital</a> &bull; Sistem Informasi Kelulusan Terpadu
+    </footer>
+
+    <script>
+        // Simple particle generator
+        const main = document.querySelector('body');
+        for (let i = 0; i < 20; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            const size = Math.random() * 5 + 2;
+            particle.style.width = `${size}px`;
+            particle.style.height = `${size}px`;
+            particle.style.left = `${Math.random() * 100}%`;
+            particle.style.top = `${Math.random() * 100}%`;
+            particle.style.opacity = Math.random() * 0.5;
+            particle.style.animation = `float ${Math.random() * 10 + 5}s linear infinite`;
+            main.appendChild(particle);
+        }
+
+        // Fetch actual health status to update UI
+        fetch('/health')
+            .then(r => r.json())
+            .then(data => {
+                if (data.node_version) document.getElementById('node-ver').innerText = data.node_version;
+            })
+            .catch(e => console.log('Could not fetch health stats'));
+    </script>
+</body>
 </html>

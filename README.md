@@ -10,7 +10,7 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/version-1.3.0-blue?style=flat-square" alt="Version">
+  <img src="https://img.shields.io/badge/version-1.5-blue?style=flat-square" alt="Version">
   <img src="https://img.shields.io/badge/PHP-8.2+-8892BF?style=flat-square&logo=php&logoColor=white" alt="PHP">
   <img src="https://img.shields.io/badge/Laravel-12.x-FF2D20?style=flat-square&logo=laravel&logoColor=white" alt="Laravel">
   <img src="https://img.shields.io/badge/Node.js-18+-339933?style=flat-square&logo=node.js&logoColor=white" alt="Node.js">
@@ -87,8 +87,8 @@ php artisan key:generate
 # DB_USERNAME=root
 # DB_PASSWORD=root
 
-# 5. Migrasi database
-php artisan migrate --force
+# 5. Migrasi dan Seeder database
+php artisan migrate:fresh --seed --force
 
 # 6. Link storage
 php artisan storage:link
@@ -140,8 +140,8 @@ nano .env
 # DB_USERNAME=user_database
 # DB_PASSWORD=password_database
 
-# 6. Migrasi dan optimasi
-php artisan migrate --force
+# 6. Migrasi, Seeder, dan optimasi
+php artisan migrate:fresh --seed --force
 php artisan storage:link
 php artisan optimize
 ```

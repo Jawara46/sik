@@ -47,6 +47,8 @@ class DocumentTemplateService
 
         $template->fill([
             'name' => (string) ($input['name'] ?? $template->name),
+            'paper_size' => (string) ($input['paper_size'] ?? $template->paper_size ?? 'a4'),
+            'orientation' => (string) ($input['orientation'] ?? $template->orientation ?? 'portrait'),
             'title_html' => $this->sanitizeHtml((string) ($input['title_html'] ?? '')),
             'intro_html' => $this->sanitizeHtml((string) ($input['intro_html'] ?? '')),
             'body_html' => $this->sanitizeHtml((string) ($input['body_html'] ?? '')),
@@ -175,6 +177,8 @@ class DocumentTemplateService
         return match ($documentType) {
             self::TYPE_TRANSCRIPT => [
                 'name' => 'Template Transkrip',
+                'paper_size' => 'a4',
+                'orientation' => 'portrait',
                 'title_html' => '<p class="ql-align-center"><strong>TRANSKRIP NILAI</strong></p>',
                 'intro_html' => '<p>Dokumen ini memuat rekap hasil belajar peserta didik atas nama <strong>{{nama_siswa}}</strong> pada {{nama_sekolah}} tahun pelajaran {{tahun_pelajaran}}.</p>',
                 'body_html' => '<p>Tabel berikut menampilkan nilai semester 1 sampai 6 beserta rata-rata akhir untuk setiap mata pelajaran.</p>',
@@ -182,6 +186,8 @@ class DocumentTemplateService
             ],
             self::TYPE_UKK_STATEMENT => [
                 'name' => 'Template Surat Keterangan UKK',
+                'paper_size' => 'a4',
+                'orientation' => 'portrait',
                 'title_html' => '<p class="ql-align-center"><strong>SURAT KETERANGAN</strong><br><strong>TELAH MENGIKUTI UJI KOMPETENSI KEAHLIAN</strong></p>',
                 'intro_html' => '<p>Kepala {{nama_sekolah}} menerangkan bahwa:</p>',
                 'body_html' => '<p>Yang bersangkutan telah mengikuti Uji Kompetensi Keahlian pada paket keahlian <strong>{{jurusan}}</strong> dengan rincian unit kompetensi sebagai berikut:</p>',
@@ -189,6 +195,8 @@ class DocumentTemplateService
             ],
             default => [
                 'name' => 'Template SKL',
+                'paper_size' => 'a4',
+                'orientation' => 'portrait',
                 'title_html' => '<p class="ql-align-center"><strong>SURAT KETERANGAN LULUS</strong></p>',
                 'intro_html' => '<p>Kepala {{nama_sekolah}} menerangkan bahwa:</p>',
                 'body_html' => '<p>Berdasarkan hasil rapat dewan guru dan ketentuan akademik yang berlaku, peserta didik tersebut di atas dinyatakan <strong>{{status_kelulusan}}</strong> dari {{nama_sekolah}} pada tahun pelajaran {{tahun_pelajaran}}.</p>',

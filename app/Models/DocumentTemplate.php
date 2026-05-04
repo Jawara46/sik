@@ -13,6 +13,8 @@ class DocumentTemplate extends Model
         'school_id',
         'document_type',
         'name',
+        'paper_size',
+        'orientation',
         'title_html',
         'intro_html',
         'body_html',

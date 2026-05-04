@@ -182,11 +182,12 @@
 
         /* ── Glass panel (countdown) ── */
         .glass-panel {
-            background: rgba(255, 255, 255, 0.12);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.25);
+            background: rgba(15, 23, 42, 0.45); /* Darker tint for contrast */
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.4);
+            color: #fff;
         }
 
         /* ── Responsive ── */
@@ -222,49 +223,6 @@
     <script src="{{ asset('assets/vendor/libs/@form-validation/auto-focus.js') }}"></script>
     <script src="{{ asset('assets/js/pages-auth.js') }}"></script>
 
-    <!-- Password Toggle: robust implementation -->
-    <script>
-    (function () {
-        function initPasswordToggle() {
-            document.querySelectorAll('[data-password-toggle]').forEach(function (btn) {
-                if (btn._pwToggleInit) return;
-                btn._pwToggleInit = true;
-
-                btn.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-
-                    var targetSel = btn.getAttribute('data-target') || btn.getAttribute('data-bs-target');
-                    var input = targetSel ? document.querySelector(targetSel) : null;
-
-                    if (!input) {
-                        var group = btn.closest('.input-group');
-                        if (group) input = group.querySelector('input[type="password"], input[type="text"]');
-                    }
-                    if (!input) return;
-
-                    var icon = btn.querySelector('i');
-                    if (input.type === 'password') {
-                        input.type = 'text';
-                        btn.setAttribute('title', 'Sembunyikan password');
-                        if (icon) { icon.classList.remove('ri-eye-line'); icon.classList.add('ri-eye-off-line'); }
-                    } else {
-                        input.type = 'password';
-                        btn.setAttribute('title', 'Tampilkan password');
-                        if (icon) { icon.classList.remove('ri-eye-off-line'); icon.classList.add('ri-eye-line'); }
-                    }
-                    input.focus();
-                });
-            });
-        }
-
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', initPasswordToggle);
-        } else {
-            initPasswordToggle();
-        }
-    })();
-    </script>
     @stack('scripts')
 </body>
 </html>

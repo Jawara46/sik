@@ -6,7 +6,6 @@
     <style>
         @page {
             margin: 18mm 16mm 18mm 16mm;
-            size: 210mm 297mm;
         }
         body, html {
             font-family: 'Times New Roman', Times, serif;

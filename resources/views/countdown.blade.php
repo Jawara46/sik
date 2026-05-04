@@ -25,16 +25,16 @@
       </div>
     </div>
 
-    <h3 class="text-white fw-bold mb-3" style="text-shadow: 0 1px 8px rgba(0,0,0,0.4);">
-      Pengumuman Kelulusan<br>Belum Dibuka
+    <h3 class="text-white fw-bolder mb-3" style="text-shadow: 0 2px 10px rgba(0,0,0,0.6); letter-spacing: 0.5px;">
+      PENGUMUMAN KELULUSAN<br>BELUM DIBUKA
     </h3>
 
-    <h1 class="display-1 text-white fw-bolder mb-4" id="countdown-timer"
-        style="font-variant-numeric: tabular-nums; text-shadow: 0 2px 12px rgba(0,0,0,0.4); letter-spacing: 2px;">
+    <h1 class="display-1 text-white fw-black mb-4" id="countdown-timer"
+        style="font-variant-numeric: tabular-nums; text-shadow: 0 4px 20px rgba(0,0,0,0.6); letter-spacing: 3px; font-weight: 900;">
       00:00:00:00
     </h1>
 
-    <p class="text-white mb-4" style="opacity: 0.85; font-size: 1.05rem; text-shadow: 0 1px 4px rgba(0,0,0,0.5);">
+    <p class="text-white mb-4 fw-medium" style="opacity: 0.95; font-size: 1.1rem; text-shadow: 0 2px 8px rgba(0,0,0,0.8);">
       Harap bersabar. Portal pengumuman kelulusan akan otomatis terbuka setelah waktu hitung mundur selesai.
     </p>
 
