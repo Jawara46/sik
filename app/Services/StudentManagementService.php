@@ -124,7 +124,7 @@ class StudentManagementService
 
         return Excel::download(
             new GradesTemplateExport([
-                new GradesTemplateSheetExport('Siswa', $headings, $rows, 0)
+                new GradesTemplateSheetExport('Siswa', $headings, $rows, 0, false)
             ]),
             'template-siswa-' . now()->format('Ymd-His') . '.xlsx',
         );

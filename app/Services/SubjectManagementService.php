@@ -117,7 +117,7 @@ class SubjectManagementService
 
         return Excel::download(
             new GradesTemplateExport([
-                new GradesTemplateSheetExport('Mata Pelajaran', $headings, $rows, 0)
+                new GradesTemplateSheetExport('Mata Pelajaran', $headings, $rows, 0, false)
             ]),
             'template-mapel-' . now()->format('Ymd-His') . '.xlsx',
         );

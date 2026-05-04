@@ -24,6 +24,7 @@ class GradesTemplateSheetExport implements FromArray, WithTitle, ShouldAutoSize,
         private readonly array $headings,
         private readonly array $rows,
         private readonly int $lockedColumns = 3,
+        private readonly bool $protect = true,
     ) {
     }
 
@@ -72,12 +73,17 @@ class GradesTemplateSheetExport implements FromArray, WithTitle, ShouldAutoSize,
                 }
 
                 $sheet->freezePane(Coordinate::stringFromColumnIndex($firstEditableColumnIndex) . '2');
-                $sheet->getProtection()
-                    ->setSheet(true)
-                    ->setSort(true)
-                    ->setInsertRows(false)
-                    ->setFormatCells(true)
-                    ->setPassword('sik-t-yazid');
+                
+                if ($this->protect) {
+                    $sheet->getProtection()
+                        ->setSheet(true)
+                        ->setSort(true)
+                        ->setInsertRows(false)
+                        ->setFormatCells(true)
+                        ->setPassword('sik-t-yazid');
+                } else {
+                    $sheet->getProtection()->setSheet(false);
+                }
             },
         ];
     }

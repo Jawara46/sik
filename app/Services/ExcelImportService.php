@@ -108,6 +108,8 @@ class ExcelImportService
                     'SMT' . $semester,
                     $this->buildBaseHeadings($subjects),
                     $this->buildSemesterRows($students, $subjects, $semester, $isSmk),
+                    3,
+                    false
                 );
             }
 
@@ -123,6 +125,8 @@ class ExcelImportService
                     'Nilai Akhir',
                     $this->buildBaseHeadings($subjects),
                     $this->buildFinalRows($students, $subjects, $isSmk),
+                    3,
+                    false
                 ),
             ]),
             sprintf('template-nilai-akhir%s-%s.xlsx', $filenameSuffix, now()->format('Ymd-His')),
