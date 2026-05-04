@@ -145,5 +145,28 @@ class SystemConfigController extends Controller
 
         return response()->json($result);
     }
+
+    /**
+     * AJAX: Fix storage:link for shared hosting.
+     */
+    public function fixStorageLink(): JsonResponse
+    {
+        try {
+            if (is_link(public_path('storage'))) {
+                return response()->json(['success' => true, 'message' => 'Tautan penyimpanan sudah ada.']);
+            }
+
+            if (file_exists(public_path('storage'))) {
+                // If it's a directory but not a link, we might need to be careful
+                return response()->json(['success' => false, 'message' => 'Folder "public/storage" sudah ada sebagai direktori biasa. Hapus folder tersebut terlebih dahulu.']);
+            }
+
+            \Illuminate\Support\Facades\Artisan::call('storage:link');
+            
+            return response()->json(['success' => true, 'message' => 'Tautan penyimpanan berhasil dibuat.']);
+        } catch (\Throwable $e) {
+            return response()->json(['success' => false, 'message' => 'Gagal membuat tautan: ' . $e->getMessage()]);
+        }
+    }
 }
 

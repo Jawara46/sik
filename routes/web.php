@@ -221,6 +221,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::get('/about', [SystemConfigController::class, 'about'])->name('about.index');
             Route::get('/update/check', [SystemConfigController::class, 'checkUpdate'])->name('update.check');
             Route::post('/update/perform', [SystemConfigController::class, 'performUpdate'])->name('update.perform');
+            Route::post('/update/fix-storage', [SystemConfigController::class, 'fixStorageLink'])->name('update.fix-storage');
         });
 
         Route::get('/wa/status', [SchoolController::class, 'waStatus'])->name('school.wa.status');

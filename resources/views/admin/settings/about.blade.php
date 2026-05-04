@@ -126,9 +126,14 @@
           </div>
           <h5 class="card-title mb-0">Pembaruan Aplikasi</h5>
         </div>
-        <button type="button" class="btn btn-outline-primary btn-sm" id="btnCheckUpdate" onclick="checkForUpdate()">
-          <i class="ri ri-search-eye-line me-1"></i> Periksa Update
-        </button>
+        <div class="d-flex gap-2">
+          <button type="button" class="btn btn-outline-secondary btn-sm" id="btnFixStorage" onclick="fixStorage()">
+            <i class="ri ri-link-m me-1"></i> Perbaiki Tautan Gambar
+          </button>
+          <button type="button" class="btn btn-outline-primary btn-sm" id="btnCheckUpdate" onclick="checkForUpdate()">
+            <i class="ri ri-search-eye-line me-1"></i> Periksa Update
+          </button>
+        </div>
       </div>
       <div class="card-body pt-0">
         <div id="updateStatus" class="d-none">
@@ -344,6 +349,30 @@ function performUpdate() {
         <i class="ri ri-error-warning-line me-1"></i>
         Terjadi kesalahan saat menjalankan update.
       </div>`;
+  });
+}
+function fixStorage() {
+  const btn = document.getElementById('btnFixStorage');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> Memperbaiki...';
+
+  fetch("{{ route('admin.settings.update.fix-storage') }}", {
+    method: 'POST',
+    headers: {
+      'X-Requested-With': 'XMLHttpRequest',
+      'Accept': 'application/json',
+      'X-CSRF-TOKEN': csrfToken,
+    }
+  })
+  .then(r => r.json())
+  .then(data => {
+    alert(data.message);
+    if (data.success) location.reload();
+  })
+  .catch(() => alert('Terjadi kesalahan.'))
+  .finally(() => {
+    btn.disabled = false;
+    btn.innerHTML = '<i class="ri ri-link-m me-1"></i> Perbaiki Tautan Gambar';
   });
 }
 </script>
