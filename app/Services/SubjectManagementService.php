@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Exports\GradesTemplateExport;
+use App\Exports\GradesTemplateSheetExport;
 use App\Imports\SimpleSheetImport;
 use App\Models\Major;
 use App\Models\Subject;
@@ -115,7 +116,9 @@ class SubjectManagementService
         }
 
         return Excel::download(
-            new GradesTemplateExport($headings, $rows),
+            new GradesTemplateExport([
+                new GradesTemplateSheetExport('Mata Pelajaran', $headings, $rows, 0)
+            ]),
             'template-mapel-' . now()->format('Ymd-His') . '.xlsx',
         );
     }
