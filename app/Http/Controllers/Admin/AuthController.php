@@ -31,14 +31,14 @@ class AuthController extends Controller
         $this->ensureDefaultAdminExists();
 
         $credentials = $request->validate([
-            'email' => ['required', 'email'],
+            'email' => ['required_if:login_mode,password', 'nullable', 'email'],
             'password' => ['required_if:login_mode,password'],
             'pin' => ['required_if:login_mode,pin', 'nullable', 'string', 'size:6'],
             'login_mode' => ['required', 'in:password,pin'],
         ]);
 
         $adminEmail = (string) env('ADMIN_EMAIL', 'admin@sik.local');
-        if (strcasecmp($credentials['email'], $adminEmail) !== 0) {
+        if ($credentials['login_mode'] === 'password' && strcasecmp((string)($credentials['email'] ?? ''), $adminEmail) !== 0) {
             return back()
                 ->withErrors(['email' => 'Gunakan email admin yang valid untuk masuk ke panel admin.'])
                 ->onlyInput('email');
