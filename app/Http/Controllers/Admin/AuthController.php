@@ -32,7 +32,9 @@ class AuthController extends Controller
 
         $credentials = $request->validate([
             'email' => ['required', 'email'],
-            'password' => ['required', 'string'],
+            'password' => ['required_if:login_mode,password'],
+            'pin' => ['required_if:login_mode,pin', 'nullable', 'string', 'size:6'],
+            'login_mode' => ['required', 'in:password,pin'],
         ]);
 
         $adminEmail = (string) env('ADMIN_EMAIL', 'admin@sik.local');
@@ -42,15 +44,37 @@ class AuthController extends Controller
                 ->onlyInput('email');
         }
 
-        if (!Auth::guard('admin')->attempt($credentials, $request->boolean('remember'))) {
-            return back()
-                ->withErrors(['email' => 'Email atau password admin tidak valid.'])
-                ->onlyInput('email');
+        $user = User::where('email', $adminEmail)->first();
+        if (!$user) {
+            return back()->withErrors(['email' => 'User admin tidak ditemukan.']);
         }
 
-        $request->session()->regenerate();
+        $authenticated = false;
+        if ($credentials['login_mode'] === 'pin') {
+            if ($user->pin && $credentials['pin'] === $user->pin) {
+                Auth::guard('admin')->login($user, $request->boolean('remember'));
+                $authenticated = true;
+            } else {
+                return back()
+                    ->withErrors(['pin' => 'PIN admin tidak valid atau belum diatur.'])
+                    ->onlyInput('email');
+            }
+        } else {
+            if (Auth::guard('admin')->attempt(['email' => $adminEmail, 'password' => $credentials['password']], $request->boolean('remember'))) {
+                $authenticated = true;
+            } else {
+                return back()
+                    ->withErrors(['email' => 'Email atau password admin tidak valid.'])
+                    ->onlyInput('email');
+            }
+        }
 
-        return redirect()->intended(route('admin.dashboard'));
+        if ($authenticated) {
+            $request->session()->regenerate();
+            return redirect()->intended(route('admin.dashboard'));
+        }
+
+        return back()->withErrors(['email' => 'Login gagal.']);
     }
 
     public function logout(Request $request): RedirectResponse
@@ -75,6 +99,7 @@ class AuthController extends Controller
                 'name' => env('ADMIN_NAME', 'Super Admin'),
                 'email' => $adminEmail,
                 'password' => Hash::make(env('ADMIN_PASSWORD', 'password')),
+                'pin' => '123456',
                 'email_verified_at' => now(),
             ]);
         } catch (Throwable) {

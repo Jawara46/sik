@@ -10,6 +10,35 @@
 
     @include('components.materialize.head')
     @stack('styles')
+    <style>
+        #back-to-top {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            z-index: 1000;
+            display: none;
+            width: 45px;
+            height: 45px;
+            text-align: center;
+            line-height: 45px;
+            background: #7367f0;
+            color: #fff;
+            cursor: pointer;
+            border-radius: 50%;
+            border: none;
+            box-shadow: 0 4px 12px rgba(115, 103, 240, 0.4);
+            transition: all 0.3s ease;
+        }
+        #back-to-top:hover {
+            transform: translateY(-5px);
+            background: #5e50ee;
+            box-shadow: 0 6px 18px rgba(115, 103, 240, 0.5);
+        }
+        #back-to-top i {
+            font-size: 24px;
+            vertical-align: middle;
+        }
+    </style>
 </head>
 <body>
     <!-- Layout wrapper -->
@@ -49,10 +78,35 @@
 
         <!-- Drag Target Area To SlideIn Menu On Small Screens -->
         <div class="drag-target"></div>
+        
+        <!-- Back to Top FAB -->
+        <button id="back-to-top" title="Scroll ke Atas">
+            <i class="ri ri-arrow-up-line"></i>
+        </button>
     </div>
     <!-- / Layout wrapper -->
 
     @include('components.materialize.scripts')
     @stack('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const backToTop = document.getElementById('back-to-top');
+            
+            window.addEventListener('scroll', function() {
+                if (window.pageYOffset > 300) {
+                    backToTop.style.display = 'block';
+                } else {
+                    backToTop.style.display = 'none';
+                }
+            });
+
+            backToTop.addEventListener('click', function() {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
 </body>
 </html>

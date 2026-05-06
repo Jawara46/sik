@@ -46,6 +46,14 @@ class AdminProfileService
         return $admin->refresh();
     }
 
+    public function updatePin(User $admin, string $pin): User
+    {
+        $admin->pin = $pin;
+        $admin->save();
+
+        return $admin->refresh();
+    }
+
     public function deleteAvatar(User $admin): User
     {
         $oldPath = (string) $admin->avatar;

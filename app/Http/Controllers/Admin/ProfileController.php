@@ -89,6 +89,31 @@ class ProfileController extends Controller
             ->with('status', 'Password admin berhasil diperbarui.');
     }
 
+    public function updatePin(Request $request): RedirectResponse
+    {
+        $admin = Auth::guard('admin')->user();
+        abort_unless($admin !== null, 403);
+
+        $validated = $request->validate([
+            'verifikasi_password' => ['required', 'string'],
+            'pin' => ['required', 'string', 'size:6', 'regex:/^[0-9]+$/'],
+            'konfirmasi_pin' => ['required', 'same:pin'],
+        ]);
+
+        if (!Hash::check($validated['verifikasi_password'], (string) $admin->password)) {
+            return back()->withErrors([
+                'verifikasi_password_pin' => 'Password verifikasi tidak sesuai.',
+            ])->withFragment('security-card');
+        }
+
+        $this->adminProfileService->updatePin($admin, $validated['pin']);
+
+        return redirect()
+            ->route('admin.profile.index', ['tab' => 'security'])
+            ->withFragment('security-card')
+            ->with('status', 'PIN keamanan berhasil diperbarui.');
+    }
+
     public function destroyAvatar(): RedirectResponse
     {
         $admin = Auth::guard('admin')->user();

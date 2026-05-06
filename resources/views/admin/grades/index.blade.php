@@ -98,6 +98,7 @@
         <table class="table border-top" id="gradesStatusTable">
           <thead>
             <tr>
+              <th style="width: 50px;">No.</th>
               <th>NISN</th>
               <th>Nama Siswa</th>
               <th>Jurusan</th>
@@ -111,6 +112,7 @@
           <tbody>
             @foreach ($studentStatuses as $item)
             <tr>
+              <td>{{ $loop->iteration }}.</td>
               <td>{{ $item['student']->nisn }}</td>
               <td>
                 <div class="fw-semibold">{{ $item['student']->name }}</div>
@@ -225,7 +227,10 @@
 
     window.jQuery(table).DataTable({
       pageLength: 25,
-      order: [[1, 'asc']],
+      order: [[2, 'asc']], // Order by Name (previously index 1, now 2)
+      columnDefs: [
+        { orderable: false, targets: [0, 7] } // No. and Aksi are not orderable
+      ],
       language: {
         search: 'Cari:',
         lengthMenu: 'Tampilkan _MENU_ data',

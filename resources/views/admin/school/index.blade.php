@@ -133,7 +133,7 @@
             <div class="col-md-6">
               <label class="form-label" for="tipe_sekolah">Tipe Sekolah</label>
               <select id="tipe_sekolah" name="tipe_sekolah" class="form-select" required>
-                @foreach (['SMP', 'MTs', 'SMK'] as $type)
+                @foreach (['SD', 'SMP', 'MTs', 'SMA', 'SMK'] as $type)
                   <option value="{{ $type }}" @selected(old('tipe_sekolah', $school->tipe_sekolah) === $type)>{{ $type }}</option>
                 @endforeach
               </select>

@@ -65,6 +65,7 @@
           <p class="text-muted mb-0">Kelola data dasar siswa, pas foto, dan status akses portal.</p>
         </div>
         <div class="d-flex flex-wrap gap-2">
+          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addStudentModal">
             <i class="ri ri-user-add-line me-1"></i> Tambah
           </button>
           <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#importStudentModal">
@@ -419,12 +420,13 @@
       window.jQuery(table).DataTable({
         pageLength: 25,
         order: [[2, 'asc']], // Order by Name
+        dom: '<"row mx-1"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>t<"row mx-1"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',
         columnDefs: [
           { orderable: false, targets: [0, 3, 8] } // No., Photo, Actions are not orderable
         ],
         language: {
-          search: 'Cari Siswa:',
-          lengthMenu: '_MENU_',
+          search: 'Cari:',
+          lengthMenu: 'Tampilkan _MENU_ data',
           info: 'Menampilkan _START_ - _END_ dari _TOTAL_ siswa',
           paginate: {
             previous: 'Prev',

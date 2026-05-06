@@ -38,8 +38,9 @@
       </div>
     @endif
 
-    <form method="POST" action="{{ route('admin.login') }}">
+    <form method="POST" action="{{ route('admin.login') }}" id="adminLoginForm">
       @csrf
+      <input type="hidden" name="login_mode" id="login_mode" value="password">
 
       <div class="mb-4">
         <label for="email" class="form-label fw-semibold">Email Admin</label>
@@ -55,7 +56,18 @@
         />
       </div>
 
-      <div class="mb-4">
+      <!-- Mode Selector -->
+      <div class="d-flex gap-2 mb-4">
+        <button type="button" class="btn btn-sm btn-outline-primary flex-grow-1 active" id="btnModePassword">
+          <i class="ri ri-lock-password-line me-1"></i>Password
+        </button>
+        <button type="button" class="btn btn-sm btn-outline-primary flex-grow-1" id="btnModePin">
+          <i class="ri ri-key-line me-1"></i>PIN
+        </button>
+      </div>
+
+      <!-- Password Input -->
+      <div id="passwordGroup" class="mb-4">
         <label for="password" class="form-label fw-semibold">Password</label>
         <div class="input-group">
           <input
@@ -64,7 +76,6 @@
             class="form-control"
             name="password"
             placeholder="Masukkan password Anda"
-            required
           />
           <button
             type="button"
@@ -73,6 +84,21 @@
             <i class="ri ri-eye-line" id="adminEyeIcon"></i>
           </button>
         </div>
+      </div>
+
+      <!-- PIN Input (Hidden by default) -->
+      <div id="pinGroup" class="mb-4 d-none">
+        <label for="pin" class="form-label fw-semibold">PIN Keamanan (6 Digit)</label>
+        <input
+          type="text"
+          id="pin"
+          class="form-control text-center"
+          name="pin"
+          maxlength="6"
+          placeholder="••••••"
+          style="letter-spacing: 0.5rem; font-size: 1.2rem; font-weight: bold;"
+        />
+        <small class="text-muted mt-2 d-block">Masukkan 6 digit kode PIN yang telah Anda atur.</small>
       </div>
 
       <div class="mb-4">
@@ -92,21 +118,59 @@
 
 <script>
   document.addEventListener('DOMContentLoaded', function() {
-    const btn = document.getElementById('toggleAdminPassword');
-    const input = document.getElementById('password');
-    const icon = document.getElementById('adminEyeIcon');
+    const btnToggle = document.getElementById('toggleAdminPassword');
+    const inputPassword = document.getElementById('password');
+    const iconEye = document.getElementById('adminEyeIcon');
     
-    if (btn && input) {
-      btn.onclick = function(e) {
+    // Toggle Password Visibility
+    if (btnToggle && inputPassword) {
+      btnToggle.onclick = function(e) {
         e.preventDefault();
-        if (input.type === 'password') {
-          input.type = 'text';
-          icon.classList.replace('ri-eye-line', 'ri-eye-off-line');
+        if (inputPassword.type === 'password') {
+          inputPassword.type = 'text';
+          iconEye.classList.replace('ri-eye-line', 'ri-eye-off-line');
         } else {
-          input.type = 'password';
-          icon.classList.replace('ri-eye-off-line', 'ri-eye-line');
+          inputPassword.type = 'password';
+          iconEye.classList.replace('ri-eye-off-line', 'ri-eye-line');
         }
       };
+    }
+
+    // Switch Login Mode (Password vs PIN)
+    const btnModePassword = document.getElementById('btnModePassword');
+    const btnModePin = document.getElementById('btnModePin');
+    const loginModeInput = document.getElementById('login_mode');
+    const passwordGroup = document.getElementById('passwordGroup');
+    const pinGroup = document.getElementById('pinGroup');
+    const pinInput = document.getElementById('pin');
+
+    if (btnModePassword && btnModePin) {
+      btnModePassword.onclick = function() {
+        loginModeInput.value = 'password';
+        passwordGroup.classList.remove('d-none');
+        pinGroup.classList.add('d-none');
+        btnModePassword.classList.add('active');
+        btnModePin.classList.remove('active');
+        inputPassword.setAttribute('required', 'required');
+        pinInput.removeAttribute('required');
+      };
+
+      btnModePin.onclick = function() {
+        loginModeInput.value = 'pin';
+        passwordGroup.classList.add('d-none');
+        pinGroup.classList.remove('d-none');
+        btnModePin.classList.add('active');
+        btnModePassword.classList.remove('active');
+        pinInput.setAttribute('required', 'required');
+        inputPassword.removeAttribute('required');
+      };
+    }
+
+    // PIN Numeric Only
+    if (pinInput) {
+      pinInput.addEventListener('input', function() {
+        this.value = this.value.replace(/[^0-9]/g, '');
+      });
     }
   });
 </script>

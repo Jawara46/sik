@@ -282,6 +282,71 @@
             <button type="submit" class="btn btn-primary">{{ __('app.profile.save_password') }}</button>
           </div>
         </form>
+
+        <hr class="my-6">
+
+        <h5 class="mb-4">PIN Keamanan (Login Cepat)</h5>
+        <p class="text-muted mb-5">Gunakan PIN 6 digit untuk masuk ke panel admin dengan lebih cepat tanpa password panjang.</p>
+
+        <form action="{{ route('admin.profile.pin.update') }}" method="POST" class="row g-5">
+          @csrf
+          @method('PUT')
+
+          <div class="col-12 col-md-6">
+            <label for="pin" class="form-label">PIN Baru (6 Digit Angka)</label>
+            <input
+              type="text"
+              id="pin_setup"
+              name="pin"
+              class="form-control @error('pin') is-invalid @enderror"
+              maxlength="6"
+              placeholder="123456"
+              required>
+            @error('pin')
+              <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+          </div>
+
+          <div class="col-12 col-md-6">
+            <label for="konfirmasi_pin" class="form-label">Konfirmasi PIN Baru</label>
+            <input
+              type="text"
+              id="konfirmasi_pin"
+              name="konfirmasi_pin"
+              class="form-control @error('konfirmasi_pin') is-invalid @enderror"
+              maxlength="6"
+              placeholder="123456"
+              required>
+            @error('konfirmasi_pin')
+              <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+          </div>
+
+          <div class="col-12">
+            <label for="verifikasi_password_pin" class="form-label">Verifikasi Password Admin</label>
+            <div class="input-group input-group-merge">
+              <input
+                type="password"
+                id="verifikasi_password_pin"
+                name="verifikasi_password"
+                class="form-control @error('verifikasi_password_pin') is-invalid @enderror"
+                placeholder="Masukkan password akun Anda untuk konfirmasi"
+                required>
+            </div>
+            @error('verifikasi_password_pin')
+              <div class="invalid-feedback d-block">{{ $message }}</div>
+            @enderror
+          </div>
+
+          <div class="col-12">
+            <button type="submit" class="btn btn-success">Simpan PIN Keamanan</button>
+            @if ($admin->pin)
+              <span class="ms-3 text-success small"><i class="ri ri-checkbox-circle-line me-1"></i>PIN sudah aktif</span>
+            @else
+              <span class="ms-3 text-warning small"><i class="ri ri-error-warning-line me-1"></i>PIN belum diatur</span>
+            @endif
+          </div>
+        </form>
       </div>
     </div>
   </div>

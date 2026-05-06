@@ -56,7 +56,7 @@ class SchoolController extends Controller
             'web_sekolah' => ['nullable', 'url', 'max:255'],
             'alamat_sekolah' => ['nullable', 'string'],
             'tempat_surat' => ['nullable', 'string', 'max:120'],
-            'tipe_sekolah' => ['required', 'in:SMP,MTs,SMK'],
+            'tipe_sekolah' => ['required', 'in:SD,SMP,MTs,SMA,SMK'],
             'nama_kepsek' => ['nullable', 'string', 'max:150'],
             'nip_kepsek' => ['nullable', 'string', 'max:50'],
             'tahun_pelajaran' => ['nullable', 'string', 'max:20'],
