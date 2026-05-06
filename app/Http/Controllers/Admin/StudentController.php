@@ -147,8 +147,7 @@ class StudentController extends Controller
                 });
             })
             ->orderBy('name')
-            ->paginate(20)
-            ->withQueryString();
+            ->get();
 
         return view('admin.students.index', [
             'students' => $students,

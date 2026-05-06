@@ -77,11 +77,9 @@
             vertical-align: top;
         }
         .photo-box {
-            width: 120px;
+            width: 110px;
             text-align: center;
-            float: right;
-            margin-left: 20px;
-            margin-bottom: 12px;
+            margin: 0 auto;
         }
         .photo-box img {
             width: 110px;
@@ -109,7 +107,7 @@
         .qr-box img {
             height: 90px;
             display: block;
-            margin: 0 auto;
+            margin-left: 0;
         }
         .template-html p {
             margin: 0 0 12px;
@@ -198,15 +196,10 @@
     @endif
 
     <div class="title template-html">
-        <div style="margin-bottom: 2px;">{!! $template['title_html'] ?? '<strong>SURAT KETERANGAN LULUS</strong>' !!}</div>
+        <div style="margin-bottom: 2px; text-decoration: underline;">{!! $template['title_html'] ?? '<strong>SURAT KETERANGAN LULUS</strong>' !!}</div>
         <div>Nomor: {{ $document->document_number ?? 'DRAFT-' . $document->id }}</div>
     </div>
 
-    @if(($documentMeta['show_photo'] ?? false) && $studentPhotoPath)
-        <div class="photo-box">
-            <img src="{{ $studentPhotoPath }}" alt="Pas Foto Siswa">
-        </div>
-    @endif
 
     <div class="content template-html">
         {!! $template['intro_html'] ?? ('<p>Kepala ' . e($school['nama_sekolah'] ?? 'sekolah') . ' menerangkan bahwa:</p>') !!}
@@ -308,11 +301,22 @@
 
     <table class="signature-table">
         <tr>
-            <td width="55%"></td>
-            <td width="20%" class="qr-box">
+            <!-- QR Code (Left) -->
+            <td width="30%" class="qr-box">
                 <img src="{{ $qrCode }}" alt="QR Verifikasi">
             </td>
-            <td width="25%" style="text-align: center;">
+            
+            <!-- Pas Foto (Middle) -->
+            <td width="30%" style="text-align: center; vertical-align: middle;">
+                @if(($documentMeta['show_photo'] ?? false) && $studentPhotoPath)
+                    <div class="photo-box">
+                        <img src="{{ $studentPhotoPath }}" alt="Pas Foto Siswa">
+                    </div>
+                @endif
+            </td>
+            
+            <!-- Signature (Right) -->
+            <td width="40%" style="text-align: left; white-space: nowrap; padding-left: 20px;">
                 {{ $documentMeta['issued_place'] ?? 'Kabupaten' }}, {{ $issuedDate }}<br>
                 Kepala Sekolah
                 <div class="signature-box" style="margin-top: 8px;">
@@ -323,9 +327,13 @@
                         <img src="{{ $ttdKepsekPath }}" style="height: 58px; margin-right: 0;" alt="">
                     @endif
                 </div>
-                <strong>{{ strtoupper($school['nama_kepsek'] ?? 'KEPALA SEKOLAH') }}</strong><br>
+                <div style="margin-top: 8px;">
+                    <strong>{{ strtoupper($school['nama_kepsek'] ?? 'KEPALA SEKOLAH') }}</strong>
+                </div>
                 @if(!empty($school['nip_kepsek']))
                     NIP. {{ $school['nip_kepsek'] }}
+                @else
+                    NIP. ...........................
                 @endif
             </td>
         </tr>

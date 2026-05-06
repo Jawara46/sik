@@ -2,6 +2,29 @@
 
 @section('title', 'Daftar Siswa - SIK-T')
 
+@push('styles')
+<style>
+  .pagination .page-item .page-link {
+    border-radius: 50% !important;
+    margin: 0 3px;
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background-color: #f8f9fa;
+    color: #6c757d;
+  }
+  .pagination .page-item.active .page-link {
+    background-color: #7367f0 !important;
+    color: #fff !important;
+    box-shadow: 0 2px 6px rgba(115, 103, 240, 0.3);
+  }
+</style>
+@endpush
+
+
 @section('content')
 @php
   $resolveMediaUrl = static function (?string $path): ?string {
@@ -36,97 +59,94 @@
 <div class="row">
   <div class="col-12">
     <div class="card">
-      <div class="card-header d-flex flex-wrap justify-content-between align-items-center gap-3">
+      <div class="card-header pb-3 d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3">
         <div>
           <h5 class="card-title mb-1">Daftar Siswa</h5>
-          <p class="mb-0 text-muted">Data siswa untuk proses SKL, transkrip, dan notifikasi WhatsApp.</p>
+          <p class="text-muted mb-0">Kelola data dasar siswa, pas foto, dan status akses portal.</p>
         </div>
         <div class="d-flex flex-wrap gap-2">
-          <form method="GET" action="{{ route('admin.students.index') }}" class="d-flex gap-2">
-            <input
-              type="text"
-              name="q"
-              class="form-control"
-              placeholder="Cari NISN / Nama"
-              value="{{ $keyword }}"
-            >
-            <button type="submit" class="btn btn-outline-primary">Cari</button>
-          </form>
-          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addStudentModal">
-            Tambah Siswa
+            <i class="ri ri-user-add-line me-1"></i> Tambah
           </button>
           <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#importStudentModal">
-            Import
+            <i class="ri ri-file-excel-2-line me-1"></i> Import
           </button>
         </div>
       </div>
-      <div class="card-body p-0">
-        <div class="table-responsive">
-          <table class="table table-hover mb-0">
-            <thead>
+      <div class="card-datatable table-responsive">
+        <table class="table border-top table-hover mb-0" id="studentsTable">
+          <thead>
+            <tr>
+              <th style="width: 50px;">No.</th>
+              <th>NISN</th>
+              <th>Nama</th>
+              <th class="text-center">Pas Foto</th>
+              @if ($isSmk)
+                <th>Jurusan</th>
+              @endif
+              <th>Tempat, Tanggal Lahir</th>
+              <th>Nama Ortu</th>
+              <th>WA Status</th>
+              <th class="text-center">Aksi</th>
+            </tr>
+          </thead>
+          <tbody>
+            @forelse ($students as $student)
               <tr>
-                <th>NISN</th>
-                <th>Nama</th>
-                <th>Pas Foto</th>
-                @if ($isSmk)
-                  <th>Jurusan</th>
-                @endif
-                <th>Tempat, Tanggal Lahir</th>
-                <th>Nama Ortu</th>
-                <th>Status WA</th>
-                <th class="text-end">Aksi</th>
-              </tr>
-            </thead>
-            <tbody>
-              @forelse ($students as $student)
-                <tr>
-                  <td class="fw-medium">{{ $student->nisn }}</td>
-                  <td>{{ $student->name }}</td>
-                  <td>
-                    @if ($resolveMediaUrl($student->photo))
-                      <img
-                        src="{{ $resolveMediaUrl($student->photo) }}"
-                        alt="Pas Foto {{ $student->name }}"
-                        class="rounded border"
-                        style="width: 48px; height: 64px; object-fit: cover;"
-                      >
-                    @else
-                      <span class="badge bg-label-warning">Belum Ada</span>
-                    @endif
-                  </td>
-                  @if ($isSmk)
-                    <td>
-                      @if ($student->major)
-                        {{ $student->major->name }} ({{ $student->major->code }})
-                      @else
-                        <span class="text-muted">-</span>
-                      @endif
-                    </td>
+                <td>{{ $loop->iteration }}.</td>
+                <td class="fw-semibold">{{ $student->nisn }}</td>
+                <td>
+                  <div class="fw-bold">{{ $student->name }}</div>
+                  <small class="text-muted">{{ $student->nis ?: 'No NIS' }}</small>
+                </td>
+                <td class="text-center">
+                  @if ($resolveMediaUrl($student->photo))
+                    <img
+                      src="{{ $resolveMediaUrl($student->photo) }}"
+                      alt="Foto"
+                      class="rounded shadow-sm border"
+                      style="width: 38px; height: 50px; object-fit: cover;"
+                    >
+                  @else
+                    <span class="badge bg-label-secondary"><i class="ri ri-image-line"></i></span>
                   @endif
+                </td>
+                @if ($isSmk)
                   <td>
-                    @php
-                      $tempat = $student->tempat_lahir ?: '-';
-                      $tanggal = $student->tanggal_lahir ? $student->tanggal_lahir->format('d-m-Y') : '-';
-                    @endphp
-                    {{ $tempat }}, {{ $tanggal }}
-                  </td>
-                  <td>{{ $student->nama_orang_tua ?: '-' }}</td>
-                  <td>
-                    @if (!empty($student->nomor_wa))
-                      <span class="badge bg-label-success">Terhubung</span>
-                      <span class="text-muted ms-1">{{ $student->nomor_wa }}</span>
+                    @if ($student->major)
+                      <div class="fw-medium text-primary">{{ $student->major->code }}</div>
+                      <small class="text-muted">{{ $student->major->name }}</small>
                     @else
-                      <span class="badge bg-label-warning">Belum Diisi</span>
+                      <span class="text-muted">-</span>
                     @endif
                   </td>
-                  <td class="text-end">
+                @endif
+                <td>
+                  @php
+                    $tempat = $student->tempat_lahir ?: '-';
+                    $tanggal = $student->tanggal_lahir ? $student->tanggal_lahir->format('d-m-Y') : '-';
+                  @endphp
+                  <div>{{ $tempat }}</div>
+                  <small class="text-muted">{{ $tanggal }}</small>
+                </td>
+                <td>{{ $student->nama_orang_tua ?: '-' }}</td>
+                <td>
+                  @if (!empty($student->nomor_wa))
+                    <div class="text-success small fw-bold"><i class="ri ri-whatsapp-line me-1"></i>Terhubung</div>
+                    <div class="small text-muted">{{ $student->nomor_wa }}</div>
+                  @else
+                    <span class="badge bg-label-warning px-2">Belum Diisi</span>
+                  @endif
+                </td>
+                <td class="text-center">
+                  <div class="d-flex justify-content-center gap-1">
                     <button
                       type="button"
-                      class="btn btn-sm btn-outline-primary"
+                      class="btn btn-icon btn-sm btn-outline-primary"
                       data-bs-toggle="modal"
                       data-bs-target="#editStudentModal-{{ $student->id }}"
+                      title="Edit"
                     >
-                      Edit
+                      <i class="ri ri-pencil-line"></i>
                     </button>
                     <form
                       action="{{ route('admin.students.destroy', $student) }}"
@@ -136,24 +156,24 @@
                     >
                       @csrf
                       @method('DELETE')
-                      <button type="submit" class="btn btn-sm btn-outline-danger">Hapus</button>
+                      <button type="submit" class="btn btn-icon btn-sm btn-outline-danger" title="Hapus">
+                        <i class="ri ri-delete-bin-line"></i>
+                      </button>
                     </form>
-                  </td>
-                </tr>
-              @empty
-                <tr>
-                  <td colspan="{{ $isSmk ? 8 : 7 }}" class="text-center py-5 text-muted">
-                    Data siswa belum tersedia.
-                  </td>
-                </tr>
-              @endforelse
-            </tbody>
-          </table>
-        </div>
+                  </div>
+                </td>
+              </tr>
+            @empty
+              <tr>
+                <td colspan="{{ $isSmk ? 9 : 8 }}" class="text-center py-5 text-muted">
+                  <i class="ri-user-search-line display-4 d-block mb-2"></i>
+                  Data siswa tidak ditemukan.
+                </td>
+              </tr>
+            @endforelse
+          </tbody>
+        </table>
       </div>
-      <div class="card-footer d-flex justify-content-between align-items-center">
-        <small class="text-muted">Total: {{ $students->total() }} siswa</small>
-        {{ $students->links() }}
       </div>
     </div>
   </div>
@@ -380,8 +400,10 @@
 @endsection
 
 @push('scripts')
+<script src="{{ asset('assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js') }}"></script>
 <script>
   document.addEventListener('DOMContentLoaded', function () {
+    // Modal handling
     const openModal = @json($openModal);
     if (openModal === 'import') {
       const element = document.getElementById('importStudentModal');
@@ -389,6 +411,27 @@
         const modal = new bootstrap.Modal(element);
         modal.show();
       }
+    }
+
+    // DataTables initialization
+    const table = document.getElementById('studentsTable');
+    if (table && window.jQuery && window.jQuery.fn.DataTable) {
+      window.jQuery(table).DataTable({
+        pageLength: 25,
+        order: [[2, 'asc']], // Order by Name
+        columnDefs: [
+          { orderable: false, targets: [0, 3, 8] } // No., Photo, Actions are not orderable
+        ],
+        language: {
+          search: 'Cari Siswa:',
+          lengthMenu: '_MENU_',
+          info: 'Menampilkan _START_ - _END_ dari _TOTAL_ siswa',
+          paginate: {
+            previous: 'Prev',
+            next: 'Next'
+          }
+        }
+      });
     }
   });
 </script>
