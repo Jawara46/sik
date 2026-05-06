@@ -272,8 +272,8 @@ function checkForUpdate() {
             </div>
           </div>
         </div>
-        <div class="mb-2"><strong>Catatan Rilis:</strong></div>
-        <div class="bg-light p-3 rounded-3 mb-3" style="font-size: 0.88rem;">${data.notes || 'Tidak ada catatan.'}</div>
+        <div class="mb-2 fw-bold text-dark"><i class="ri ri-list-check-2 me-1"></i> Catatan Perubahan:</div>
+        <div class="bg-light p-3 rounded-3 mb-3 border" style="font-size: 0.88rem; white-space: pre-line; line-height: 1.6; color: #444;">${data.notes || 'Tidak ada catatan rilis.'}</div>
         <button type="button" class="btn btn-success" onclick="performUpdate()">
           <i class="ri ri-download-cloud-2-line me-1"></i> Jalankan Update ke v${data.tag}
         </button>`;

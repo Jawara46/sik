@@ -87,11 +87,24 @@ class AppUpdateService
 
             $tag = $response->json()[0];
             $latestTag = ltrim((string) ($tag['name'] ?? ''), 'v');
+            
+            // Try to get more info about the tag/commit for notes
+            $notes = 'Pembaruan tersedia (Tag: ' . $tag['name'] . ')';
+            if (isset($tag['commit']['url'])) {
+                $commitResponse = Http::timeout(5)
+                    ->withHeaders(['Accept' => 'application/vnd.github.v3+json'])
+                    ->get($tag['commit']['url']);
+                
+                if ($commitResponse->successful()) {
+                    $commitData = $commitResponse->json();
+                    $notes = (string) ($commitData['commit']['message'] ?? $notes);
+                }
+            }
 
             return [
                 'tag' => $latestTag,
                 'url' => "https://api.github.com/repos/{$repo}/zipball/{$tag['name']}",
-                'notes' => 'Rilis dari tag terbaru.',
+                'notes' => $notes,
                 'date' => now()->toIso8601String(),
                 'has_update' => version_compare($latestTag, $this->getCurrentVersion(), '>'),
             ];
