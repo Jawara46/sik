@@ -320,7 +320,7 @@
                 {{ $documentMeta['issued_place'] ?? 'Kabupaten' }}, {{ $issuedDate }}<br>
                 Kepala Sekolah
                 
-                <div style="position: relative; height: 85px; margin-top: 5px; margin-bottom: 5px;">
+                <div style="position: relative; height: 70px; margin-top: 5px; margin-bottom: 2px;">
                     @if(($documentMeta['show_stamp'] ?? false) && $stempelPath)
                         <img src="{{ $stempelPath }}" 
                              style="position: absolute; left: -35px; top: -15px; height: 100px; opacity: 0.7; z-index: 1;" 
@@ -334,7 +334,7 @@
                     @endif
                 </div>
 
-                <div style="position: relative; z-index: 3; margin-top: 5px;">
+                <div style="position: relative; z-index: 3; margin-top: 2px;">
                     <strong>{{ strtoupper($school['nama_kepsek'] ?? 'KEPALA SEKOLAH') }}</strong>
                 </div>
                 @if(!empty($school['nip_kepsek']))
