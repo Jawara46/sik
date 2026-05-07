@@ -319,15 +319,22 @@
             <td width="40%" style="text-align: left; white-space: nowrap; padding-left: 20px;">
                 {{ $documentMeta['issued_place'] ?? 'Kabupaten' }}, {{ $issuedDate }}<br>
                 Kepala Sekolah
-                <div class="signature-box" style="margin-top: 5px; margin-bottom: -15px;">
+                
+                <div style="position: relative; height: 85px; margin-top: 5px; margin-bottom: 5px;">
                     @if(($documentMeta['show_stamp'] ?? false) && $stempelPath)
-                        <img src="{{ $stempelPath }}" style="height: 90px; opacity: 0.55; margin-bottom: -65px; margin-right: 30px;" alt="">
+                        <img src="{{ $stempelPath }}" 
+                             style="position: absolute; left: -35px; top: -15px; height: 100px; opacity: 0.7; z-index: 1;" 
+                             alt="Stempel">
                     @endif
+                    
                     @if(($documentMeta['show_signature'] ?? false) && $ttdKepsekPath)
-                        <img src="{{ $ttdKepsekPath }}" style="height: 75px; margin-right: 0;" alt="">
+                        <img src="{{ $ttdKepsekPath }}" 
+                             style="position: relative; left: 15px; height: 80px; z-index: 2;" 
+                             alt="Tanda Tangan">
                     @endif
                 </div>
-                <div style="margin-top: 0; position: relative; z-index: 2;">
+
+                <div style="position: relative; z-index: 3; margin-top: 5px;">
                     <strong>{{ strtoupper($school['nama_kepsek'] ?? 'KEPALA SEKOLAH') }}</strong>
                 </div>
                 @if(!empty($school['nip_kepsek']))
