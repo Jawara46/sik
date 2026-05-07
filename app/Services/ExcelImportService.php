@@ -747,13 +747,13 @@ class ExcelImportService
     /**
      * @param array<int, int> $subjectMajorIds
      */
-    private function isSubjectApplicableForMajor(array $subjectMajorIds, ?int $majorId, bool $isSmk): bool
+    private function isSubjectApplicableForMajor(array $subjectMajorIds, mixed $majorId, bool $isSmk): bool
     {
         if (!$isSmk || $subjectMajorIds === []) {
             return true;
         }
 
-        if ($majorId === null) {
+        if ($majorId === null || $majorId === '') {
             return false;
         }
 
